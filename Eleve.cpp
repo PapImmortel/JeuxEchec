@@ -112,7 +112,7 @@ struct Dessin {
         "[ZXXZXXXXXXXXXXXXXXXXXZXXZ]"
         "[ ZXZXXXXXXXXXXXXXXXXXZXZ ]"
         "[  ZZZZZXXXXXXXXXXXZZZZZ  ]"
-        "[       ZZZZZZZZZZZ       ]";
+        "[       ZZZZZZZZZZZ       ]"; 
 
 };
  
