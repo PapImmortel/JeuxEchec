@@ -246,7 +246,7 @@ void InitColors()
 	AssignColor('R', 255, 0, 0);//red
 	AssignColor('M', 255, 0, 255); // magenta
 	AssignColor('I', 204, 0, 102); // mauve foncé
-	AssignColor('X', 255, 102, 102); // saumon
+	AssignColor('X', 255, 102, 102); // saumon  
 	AssignColor('Z', 255, 65, 85); // saumon foncé
 	AssignColor('T', 255, 204, 153); // beige
 
