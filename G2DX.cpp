@@ -227,29 +227,56 @@ void InitColors()
 {
 	// https://www.rapidtables.org/fr/web/color/RGB_Color.html
 
-	AssignColor('R', 255, 0, 0);//red
 	AssignColor('V', 0, 255, 0);//green
+	AssignColor('Q', 0, 153, 0);//dark green
+	AssignColor('!', 102, 102, 0);// vertKaki
+
+	AssignColor('C', 0, 255, 255); // cyan
 	AssignColor('B', 0, 0, 255);//blue
+	AssignColor('E', 55, 55, 255);//blue un peu plus clair
+	AssignColor('?', 0, 128, 255);//milieu entre un peu clair et light
+	AssignColor('D', 0, 204, 204); // bleu mi-foncé
+	AssignColor('N', 102, 178, 255);//light blue 
+	AssignColor('+', 204, 255, 255);//bleu pale
+
+
 	AssignColor('K', 0, 0, 0); // black
 	AssignColor('W', 255, 255, 255); // white
+
+	AssignColor('R', 255, 0, 0);//red
 	AssignColor('M', 255, 0, 255); // magenta
-	AssignColor('C', 0, 255, 255); // cyan
-	AssignColor('Y', 255, 255, 0); // yellow
-	AssignColor('S', 192, 192, 192); // silver
-	AssignColor('L', 204, 102, 0); // light brown
-	AssignColor('F', 153, 76, 0); // brown
-	AssignColor('J', 102, 51, 0); // dark brown
-	AssignColor('G', 128, 128, 128); // gray
-	AssignColor('O', 255, 215, 0); // or
-	AssignColor('A', 255, 128, 0); // orange
-	AssignColor('T', 255, 204, 153); // beige
-	AssignColor('D', 0, 204, 204); // bleu mi-foncé
-	AssignColor('P', 204, 0, 204); // violet
-	AssignColor('U', 153, 153, 0); // jauneCouronne?
-	AssignColor('H', 255, 102, 178); // rose
 	AssignColor('I', 204, 0, 102); // mauve foncé
 	AssignColor('X', 255, 102, 102); // saumon
 	AssignColor('Z', 255, 65, 85); // saumon foncé
+	AssignColor('T', 255, 204, 153); // beige
+
+	AssignColor('H', 255, 102, 178); // rose
+
+	AssignColor('P', 204, 0, 204); // violet
+
+
+
+	AssignColor('A', 255, 128, 0); // orange
+	AssignColor('2', 255, 229, 204); // orange pale
+
+
+	AssignColor('L', 204, 102, 0); // light brown
+	AssignColor('F', 153, 76, 0); // brown (pelage mi foncé
+	AssignColor('J', 102, 51, 0); // dark brown
+	AssignColor('*', 125, 65, 0); // Marron criniere mi clair
+	AssignColor('/', 255, 178, 102); // Marron peauCheval claire
+	AssignColor('1', 102, 0, 0); // Marron rouge foncé 
+
+
+	AssignColor('O', 255, 215, 0); // or
+	AssignColor('Y', 255, 255, 0); // yellow
+	AssignColor('U', 153, 153, 0); // jauneCouronne?
+
+
+	AssignColor('G', 128, 128, 128); // gray
+	AssignColor('S', 192, 192, 192); // silver
+
+
 
 
 
