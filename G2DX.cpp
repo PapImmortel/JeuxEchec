@@ -246,7 +246,7 @@ void InitColors()
 	AssignColor('R', 255, 0, 0);//red
 	AssignColor('M', 255, 0, 255); // magenta
 	AssignColor('I', 204, 0, 102); // mauve foncé
-	AssignColor('X', 255, 102, 102); // saumon  
+	AssignColor('X', 255, 102, 102); // saumon  (le clair)
 	AssignColor('Z', 255, 65, 85); // saumon foncé
 	AssignColor('T', 255, 204, 153); // beige
 
@@ -271,9 +271,14 @@ void InitColors()
 	AssignColor('O', 255, 215, 0); // or
 	AssignColor('Y', 255, 255, 0); // yellow
 	AssignColor('U', 153, 153, 0); // jauneCouronne?
+	AssignColor('3', 255, 255, 153); // jaune pale
+
 
 
 	AssignColor('G', 128, 128, 128); // gray
+	AssignColor('4', 32, 32, 32); // noir clair
+	AssignColor('5', 96, 96, 96); // gris foncé
+
 	AssignColor('S', 192, 192, 192); // silver
 
 
@@ -313,7 +318,7 @@ int G2D::InitTextureFromString(V2& Size, const string& Sprite)
 
 
 	int pos = 0;
-	unsigned char data[128 * 128];
+	unsigned char data[256 * 256];
 
 	for (int y = HautPix - 1; y >= 0; y--)
 		for (int x = 0; x < LargPix; x++)
