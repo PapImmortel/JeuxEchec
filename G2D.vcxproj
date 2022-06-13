@@ -151,7 +151,6 @@
     <ClCompile Include="Eleve.cpp" />
     <ClCompile Include="G2DX.cpp" />
     <ClCompile Include="G2DPPM.cpp" />
-    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="V2.cpp" />
   </ItemGroup>
   <ItemGroup>

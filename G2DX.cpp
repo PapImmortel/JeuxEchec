@@ -229,7 +229,10 @@ void InitColors()
 
 	AssignColor('V', 0, 255, 0);//green
 	AssignColor('Q', 0, 153, 0);//dark green
-	AssignColor('!', 102, 102, 0);// vertKaki
+	AssignColor('6', 102, 204, 0); //jaune-vert foncé
+	AssignColor('7', 153, 255, 51); //jaune-vert clair
+
+	AssignColor('!', 102, 102, 0);// vert marronâtre
 
 	AssignColor('C', 0, 255, 255); // cyan
 	AssignColor('B', 0, 0, 255);//blue
@@ -280,6 +283,8 @@ void InitColors()
 	AssignColor('5', 96, 96, 96); // gris foncé
 
 	AssignColor('S', 192, 192, 192); // silver
+	AssignColor('8', 224, 224, 224); // light grey
+
 
 
 
