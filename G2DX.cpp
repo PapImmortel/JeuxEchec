@@ -227,12 +227,21 @@ void InitColors()
 {
 	// https://www.rapidtables.org/fr/web/color/RGB_Color.html
 
+	AssignColor('!', 102, 102, 0);// vert marronâtre
+
+
 	AssignColor('V', 0, 255, 0);//green
 	AssignColor('Q', 0, 153, 0);//dark green
 	AssignColor('6', 102, 204, 0); //jaune-vert foncé
 	AssignColor('7', 153, 255, 51); //jaune-vert clair
 
-	AssignColor('!', 102, 102, 0);// vert marronâtre
+	AssignColor('O', 255, 215, 0); // or
+	AssignColor('Y', 255, 255, 0); // yellow
+	AssignColor('%', 102, 102, 0); // jauneCouronne kaki foncé
+	AssignColor('U', 153, 153, 0); // jauneCouronne kaki?
+	AssignColor('3', 255, 255, 153); // jaune pale
+	AssignColor('9', 255, 255, 102); // jaune moins pale
+
 
 	AssignColor('C', 0, 255, 255); // cyan
 	AssignColor('B', 0, 0, 255);//blue
@@ -271,12 +280,6 @@ void InitColors()
 	AssignColor('1', 102, 0, 0); // Marron rouge foncé 
 
 
-	AssignColor('O', 255, 215, 0); // or
-	AssignColor('Y', 255, 255, 0); // yellow
-	AssignColor('U', 153, 153, 0); // jauneCouronne?
-	AssignColor('3', 255, 255, 153); // jaune pale
-
-
 
 	AssignColor('G', 128, 128, 128); // gray
 	AssignColor('4', 32, 32, 32); // noir clair
@@ -284,12 +287,6 @@ void InitColors()
 
 	AssignColor('S', 192, 192, 192); // silver
 	AssignColor('8', 224, 224, 224); // light grey
-
-
-
-
-
-
 
 
 	AssignColor(' ', 255, 255, 255, 0); // transparent
