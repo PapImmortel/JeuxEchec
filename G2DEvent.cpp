@@ -126,32 +126,59 @@ void reshape(int w, int h)
 //
 /////////////////////////////////////////////////////////////
 
-struct mouseEvent { int x; int y; bool clicked; };
+bool mousePressed[16] = { false, false, false };
+bool mouseClicked[16] = { false, false, false };
 
-mouseEvent mousePress[3];
+int  MouseX = 0;
+int  MouseY = 0;
 
-void G2D::GetMouseButtonInfo(int idButton, bool& clicked, int& x, int& y)
+void G2D::GetMousePos(int &x, int & y)
 {
-	if (mousePress[idButton].clicked == false) { clicked = false; return; }
-	// read and erase
-	clicked = true;
-	x = mousePress[idButton].x;
-	y = mousePress[idButton].y;
-	mousePress[idButton].clicked = false;
+	x = MouseX;
+	y = MouseY;
+}
+
+bool G2D::DetectLeftClick()
+{
+	
+	bool r = mouseClicked[GLUT_LEFT_BUTTON];
+	mouseClicked[GLUT_LEFT_BUTTON] = false; // on efface l'ev click
+	return r;
+}
+
+bool G2D::DetectRightClick()
+{
+	bool r = mouseClicked[GLUT_RIGHT_BUTTON];
+	mouseClicked[GLUT_RIGHT_BUTTON] = false; // on efface l'ev click
+	return r;
+}
+
+
+bool G2D::IsAnyMouseButtonPressed()
+{
+	return mousePressed[0] | mousePressed[1] | mousePressed[2];
+}
+
+bool G2D::IsMouseLeftButtonPressed()
+{
+	return mousePressed[GLUT_LEFT_BUTTON];
+}
+
+bool G2D::IsMouseRightButtonPressed()
+{
+	return mousePressed[GLUT_RIGHT_BUTTON];
 }
 
 void mouse(int button, int state, int x, int y)
 {
-	mouseEvent M;
-	M.x = x;
-	M.y = Wheight - y;
-	M.clicked = true;
-	if (state == GLUT_DOWN)
-		mousePress[button] = M;
+	if (state == GLUT_DOWN)   { mousePressed[button] = true;   mouseClicked[button] = true; }
+	if (state == GLUT_UP)     { mousePressed[button] = false;  mouseClicked[button] = false; }
+}
 
-	//  GLUT_LEFT_BUTTON    GLUT_MIDDLE_BUTTON 
-
-	cout << x << "   " << y << "   " << state << endl;
+void mouseMove(int x, int y)
+{
+	MouseX = x;
+	MouseY = Wheight - y;
 }
 
 

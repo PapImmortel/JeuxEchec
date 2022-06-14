@@ -1138,6 +1138,7 @@ struct GameData {
 
     int ecran = 0;
     int mode;
+    int joueur = 1;
     _plateau Plateau;
     bool Mur(int x, int y) { return Plateau.Map1[(8- y - 1) * 8 + x] == 'M'; }
 
@@ -1145,7 +1146,11 @@ struct GameData {
     V2 Size;
     int IdTexMur;
     int IdTexSol;
+    bool mouseIsActive = false;
+    int getJoueur() { return joueur; }
+    void setMouseIsActive(bool _mouseIsActive) { mouseIsActive = _mouseIsActive; }
     vector<_Piece> pieces = {};
+    int pieceEncours;
     void setPieces() {
         pieces.clear();
 
@@ -1458,7 +1463,15 @@ void affichage_ecran_jeu() {
             G2D::DrawRectWithTexture(piece.IdTex, V2(piece.getCoord().x*G.Lpix +8, piece.getCoord().y * G.Lpix+2), piece.Size);
         }
     }
-
+    if (G2D::IsMouseLeftButtonPressed())
+    {
+        if (G.mouseIsActive)
+        {
+            G.pieces[G.pieceEncours].IdTex = G2D::InitTextureFromString(G.pieces[G.pieceEncours].Size, G.pieces[G.pieceEncours].Texture);
+            G.pieces[G.pieceEncours].Size = G.pieces[G.pieceEncours].Size * G.pieces[G.pieceEncours].Zoom*1.5;
+            G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2(LESCOORDONN2ES DE LA SOURISAVECCALCUL), G.pieces[G.pieceEncours].Size);
+        }
+    }
 }
 //end
 void affichage_ecran_game_over() {
@@ -1539,7 +1552,43 @@ int InitPartie() {
 int gestion_ecran_jeu() {
     //l'integralité des fonctionnements gameplay / imput
 
-    cout << DeplacementPiece(_Pion(V2(6, 1), 1, 0), V2(6, 3)) << endl;
+    //cout << DeplacementPiece(_Pion(V2(6, 1), 1, 0), V2(6, 3)) << endl;
+    if (G2D::IsMouseLeftButtonPressed())
+    {
+        if (!G.mouseIsActive)
+        {
+            if (G.getJoueur() == 1)
+            {
+                for (int i = 16; i < 32; i++) {
+                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == LESCOORDONN2ES DE LA SOURISAVECCALCUL)
+                    {
+                        G.pieceEncours = i;
+                        G.setMouseIsActive(true);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 16; i++) {
+                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == LESCOORDONN2ES DE LA SOURISAVECCALCUL)
+                    {
+                        G.pieceEncours = i;
+                        G.setMouseIsActive(true);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        if (G.mouseIsActive)
+        {
+            G.setMouseIsActive(false);
+            DeplacementPiece(G.pieces[G.pieceEncours],LesCoordonneesDELASOURISCALCUL);
+        }
+    }
     return 3;
 }
 //end
@@ -1592,6 +1641,7 @@ void AssetsInit() {
 int main(int argc, char* argv[]) {
     G2D::InitWindow(argc, argv, V2(G.Lpix * 8, G.Lpix * 8), V2(200, 200),
         string("Echecs"));
+
     AssetsInit();
 
     G2D::Run(Logic, render);
