@@ -129,13 +129,13 @@ void reshape(int w, int h)
 bool mousePressed[16] = { false, false, false };
 bool mouseClicked[16] = { false, false, false };
 
-int  MouseX = 0;
-int  MouseY = 0;
+int  MouseX = 300;
+int  MouseY = 300;
 
-void G2D::GetMousePos(int &x, int & y)
+void G2D::GetMousePos(int *x, int * y)
 {
-	x = MouseX;
-	y = MouseY;
+	*x = MouseX;
+	*y = MouseY;
 }
 
 bool G2D::DetectLeftClick()
@@ -282,6 +282,7 @@ void G2D::Run(void logic(), void render())
 	glutSpecialFunc(keySpecial);
 	glutSpecialUpFunc(keySpecialUp);
 	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMove);
 
 
 	// logic

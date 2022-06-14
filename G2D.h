@@ -40,7 +40,7 @@ namespace G2D
 	void Show();  // send all draw commands 
 
 	// Mouse event
-	void GetMousePos(int& x, int& y);
+	void GetMousePos(int* x, int* y);
 	bool IsMouseLeftButtonPressed();
 	bool IsMouseRightButtonPressed();
 	bool IsAnyMouseButtonPressed();

@@ -44,9 +44,6 @@
     <ClInclude Include="glut.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="Piece.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glut32.dll">

@@ -156,7 +156,6 @@
   <ItemGroup>
     <ClInclude Include="G2D.h" />
     <ClInclude Include="glut.h" />
-    <ClInclude Include="Piece.h" />
     <ClInclude Include="V2.h" />
   </ItemGroup>
   <ItemGroup>

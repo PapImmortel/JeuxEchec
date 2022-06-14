@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Piece.h"
 
 using namespace std;
   
@@ -60,6 +59,8 @@ struct _plateau {
         int valeur = positionPiece[(8 - pos.y - 1) * 8 + pos.x] - 48;
         return valeur;
     }
+    string getPlateau() { return positionPiece; }
+
 };
 struct _Piece {
     int couleur;
@@ -316,8 +317,8 @@ struct _Dame : public _Piece {
 struct _Roi : public _Piece {
     string roiNoir =
         "[  K  KKKKKKK  K  ]"
-        "[ KOKKRORRRORKKOK ]"
-        "[ KOOROOOROOOROOK ]"
+        "[ KOKKPOPPPOPKKOK ]"
+        "[ KOOPOOOPOOOPOOK ]"
         "[ KOOOOOOOOOOOOOK ]"
         "[ KWAWAAWAWAAWAWK ]"
         "[ KOOOOOOOOOOOOOK ]"
@@ -750,32 +751,32 @@ struct _Pion : public _Piece {
         "[     K4KTTTTTTK       K4GSSSSSGK  ]"
         "[      KTKTTTTJK      KGSWKKKKKWGK ]"
         "[     KTTTKTTTTK      KGWK     KW4 ]"
-        "[    KLTTTTKTTWJK    K4WK       KSK]"
-        "[   KJATTTTTTTTKJK   KGWK       KGK]"
-        "[  KJLLATTTTTALKJK   KSWK        4K]"
-        "[ KJLJLA9TTTTT9KJK   K8WK        KK]"
-        "[ KJLAJLA99TTT9JKKK  KWSK         K]"
-        "[KJLAALLLL99T9ALKLK K8WG          K]"
-        "[KJKJLLJLLJA99JLKAKKKGSK           ]"
-        "[KKJJKJKJLLLJLAJKTTTTKK            ]"
-        "[KJLJJLJLLLAALLJKTTTTK             ]"
-        "[KLAALKJLLLALLLJKTTTTK             ]"
-        "[KLAL9LJJLLLLLLKKGTTTK             ]"
-        "[KLL9ALJJLLLALJKG8KTTK             ]"
-        "[KLAALLJJJLLALLGWGKTTK             ]"
-        "[KLL99JJJJJLJJGWGKTTJ              ]"
-        "[KLAAJLLJJLLJG8SKLTTJ              ]"
-        "[KLAAJLJTTJJTTJJJJTJ               ]"
-        "[KLLJLLJTTTTTTTJKKK                ]"
-        "[ KLKLKTTTTTTTTK                   ]"
+        "[    K?TTTTKTTWEK    K4WK       KSK]"
+        "[   KENTTTTTTTTKEK   KGWK       KGK]"
+        "[  KE??NTTTTTALKEK   KSWK        4K]"
+        "[ KE?E?N9TTTTT9KEK   K8WK        KK]"
+        "[ KE?NE?N99TTT9EKKK  KWSK         K]"
+        "[KE?NN????99T9N?K?K K8WG          K]"
+        "[KEKE??E??EN99E?KNKKKGSK           ]"
+        "[KKEEKEKE???E?NEKTTTTKK            ]"
+        "[KE?EE?E???NN??EKTTTTK             ]"
+        "[K?NN?KE???N???EKTTTTK             ]"
+        "[K?N?9?EE??????KKGTTTK             ]"
+        "[K??9N?EE???N?EKG8KTTK             ]"
+        "[K?NN??EEE??N??GWGKTTK             ]"
+        "[K??99EEEEE?EEGWGKTTE              ]"
+        "[K?NNE??EE??EG8SK?TTE              ]"
+        "[K?NNE?ETTEETTEEEETE               ]"
+        "[K??E??ETTTTTTTEKKK                ]"
+        "[ K?K?KTTTTTTTTK                   ]"
         "[ KKKKKKKTTTTTKK                   ]"
-        "[ KJJLJJKKKKKKJK                   ]"
-        "[ KJLLLLKWS4KJLJK                  ]"
-        "[ KJLLALK8GKJLLJK                  ]"
-        "[ KJLLALJKKJJLLJK                  ]"
-        "[ KJLLALLJLLJLLJK                  ]"
-        "[ KJLLJALLLLJLLJK                  ]"
-        "[ KJJLJLJJALJJLLK                  ]"
+        "[ KEE?EEKKKKKKEK                   ]"
+        "[ KE????KWS4KE?EK                  ]"
+        "[ KE??N?K8GKE??EK                  ]"
+        "[ KE??N?EKKEE??EK                  ]"
+        "[ KE??N??E??E??EK                  ]"
+        "[ KE??EN????E??EK                  ]"
+        "[ KEE?E?EEN?EE??K                  ]"
         "[  KJKJKJ%KKJJKKK                  ]"
         "[  KJJJ%%%%JJ%%K                   ]"
         "[  KJJ%%%U%JJ%UK                   ]"
@@ -1141,7 +1142,8 @@ struct GameData {
     int joueur = 1;
     _plateau Plateau;
     bool Mur(int x, int y) { return Plateau.Map1[(8- y - 1) * 8 + x] == 'M'; }
-
+    int xMouse;
+    int yMouse;
     int Lpix = 80;
     V2 Size;
     int IdTexMur;
@@ -1150,7 +1152,7 @@ struct GameData {
     int getJoueur() { return joueur; }
     void setMouseIsActive(bool _mouseIsActive) { mouseIsActive = _mouseIsActive; }
     vector<_Piece> pieces = {};
-    int pieceEncours;
+    int pieceEncours=-1;
     void setPieces() {
         pieces.clear();
 
@@ -1454,22 +1456,23 @@ void affichage_ecran_jeu() {
                     G.Size);
             }
         }
-    //affichage pieces
-    for (_Piece& piece : G.pieces) {
-        if (piece.getEstVivant())
-        {
-            piece.IdTex = G2D::InitTextureFromString(piece.Size, piece.Texture);
-            piece.Size = piece.Size * piece.Zoom;
-            G2D::DrawRectWithTexture(piece.IdTex, V2(piece.getCoord().x*G.Lpix +8, piece.getCoord().y * G.Lpix+2), piece.Size);
-        }
-    }
+
     if (G2D::IsMouseLeftButtonPressed())
     {
         if (G.mouseIsActive)
         {
             G.pieces[G.pieceEncours].IdTex = G2D::InitTextureFromString(G.pieces[G.pieceEncours].Size, G.pieces[G.pieceEncours].Texture);
-            G.pieces[G.pieceEncours].Size = G.pieces[G.pieceEncours].Size * G.pieces[G.pieceEncours].Zoom*1.5;
-            G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2(LESCOORDONN2ES DE LA SOURISAVECCALCUL), G.pieces[G.pieceEncours].Size);
+            G.pieces[G.pieceEncours].Size = G.pieces[G.pieceEncours].Size * G.pieces[G.pieceEncours].Zoom * 1.5;
+            G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2((G.xMouse - G.pieces[G.pieceEncours].Size.x/2), G.yMouse - G.pieces[G.pieceEncours].Size.y / 2), G.pieces[G.pieceEncours].Size);
+        }
+    }
+    //affichage pieces
+    for (int i = 0; i<32;i++) {
+        if (G.pieces[i].getEstVivant() && i!=G.pieceEncours) 
+        {
+            G.pieces[i].IdTex = G2D::InitTextureFromString(G.pieces[i].Size, G.pieces[i].Texture);
+            G.pieces[i].Size = G.pieces[i].Size * G.pieces[i].Zoom;
+            G2D::DrawRectWithTexture(G.pieces[i].IdTex, V2(G.pieces[i].getCoord().x * G.Lpix + 8, G.pieces[i].getCoord().y * G.Lpix + 2), G.pieces[i].Size);
         }
     }
 }
@@ -1555,12 +1558,13 @@ int gestion_ecran_jeu() {
     //cout << DeplacementPiece(_Pion(V2(6, 1), 1, 0), V2(6, 3)) << endl;
     if (G2D::IsMouseLeftButtonPressed())
     {
+        G2D::GetMousePos(&G.xMouse, &G.yMouse);
         if (!G.mouseIsActive)
         {
             if (G.getJoueur() == 1)
             {
                 for (int i = 16; i < 32; i++) {
-                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == LESCOORDONN2ES DE LA SOURISAVECCALCUL)
+                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == V2((int)(G.xMouse/80),(int)(G.yMouse/80)))
                     {
                         G.pieceEncours = i;
                         G.setMouseIsActive(true);
@@ -1571,7 +1575,7 @@ int gestion_ecran_jeu() {
             else
             {
                 for (int i = 0; i < 16; i++) {
-                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == LESCOORDONN2ES DE LA SOURISAVECCALCUL)
+                    if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))
                     {
                         G.pieceEncours = i;
                         G.setMouseIsActive(true);
@@ -1586,10 +1590,10 @@ int gestion_ecran_jeu() {
         if (G.mouseIsActive)
         {
             G.setMouseIsActive(false);
-            DeplacementPiece(G.pieces[G.pieceEncours],LesCoordonneesDELASOURISCALCUL);
+            DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+            G.pieceEncours = -1;
         }
-    }
-    return 3;
+    }    return 3;
 }
 //end
 int gestion_ecran_game_over() {
