@@ -9,7 +9,7 @@
 
 using namespace std;
   
-
+ 
 #define ECRAN_ACCUEIL 0
 #define ECRAN_OPTIONS 1
 #define INIT_PARTIE 2
