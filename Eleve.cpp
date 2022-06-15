@@ -54,7 +54,7 @@ struct _plateau {
         "11111111"
         "11111111";
 
-    void setPositionPiece(int x, int y, int valeur) { positionPiece[(8 - y - 1) * 8 + x] = valeur; }
+    void setPositionPiece(int x, int y, string valeur) { positionPiece.replace((8 - y - 1) * 8 + x,1,valeur); }
     int getPositionPiece(V2 pos) {
         int valeur = positionPiece[(8 - pos.y - 1) * 8 + pos.x] - 48;
         return valeur;
@@ -1297,7 +1297,6 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 2)//cavalier
     {
         if ((vCoord + V2(2, 1) == pNewPos || vCoord + V2(1, 2) == pNewPos || vCoord + V2(-2, -1) == pNewPos || vCoord + V2(-1, -2) == pNewPos || vCoord + V2(2, -1) == pNewPos || vCoord + V2(-2, 1) == pNewPos || vCoord + V2(1, -2) == pNewPos || vCoord + V2(-1, 2) == pNewPos) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8)
-            cout << "nice" << endl;
             if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur())
                 return true;
         return false;
@@ -1589,9 +1588,46 @@ int gestion_ecran_jeu() {
     {
         if (G.mouseIsActive)
         {
-            G.setMouseIsActive(false);
-            DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-            G.pieceEncours = -1;
+            G.setMouseIsActive(false);            
+            if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
+                if (G.pieces[G.pieceEncours].getCouleur() == 1) {
+
+                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "1");
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                    }
+                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 2) {
+                        for (_Piece& piece : G.pieces) {
+                            if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
+                                piece.setEstVivant();
+                            }
+                        }
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "1");
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                    }
+                }
+                if (G.pieces[G.pieceEncours].getCouleur() == 2) {
+
+                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "2");
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                    }
+                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 1) {
+                        for (_Piece& piece : G.pieces) {
+                            if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
+                                piece.setEstVivant();
+                            }
+                        }
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "2");
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                    }
+                }
+            }
+        G.pieceEncours = -1;
         }
     }    return 3;
 }
