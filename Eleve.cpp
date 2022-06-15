@@ -1139,7 +1139,7 @@ struct GameData {
 
     int ecran = 0;
     int mode;
-    int joueur = 1;
+    bool joueur = true;
     _plateau Plateau;
     bool Mur(int x, int y) { return Plateau.Map1[(8- y - 1) * 8 + x] == 'M'; }
     int xMouse;
@@ -1150,6 +1150,7 @@ struct GameData {
     int IdTexSol;
     bool mouseIsActive = false;
     int getJoueur() { return joueur; }
+    void setJoueur() { joueur=!joueur; }
     void setMouseIsActive(bool _mouseIsActive) { mouseIsActive = _mouseIsActive; }
     vector<_Piece> pieces = {};
     int pieceEncours=-1;
@@ -1215,11 +1216,11 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         return false;
     if (Piece.getTypePiece() == 0)//pion
     {
-        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6)) && Piece.getCouleur() == 2) || (vCoord + V2(1,1) == pNewPos || vCoord + V2(-1, 1) == pNewPos) || (vCoord + V2(1, -1) == pNewPos || vCoord + V2(-1, -1) == pNewPos)) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6)) && Piece.getCouleur() == 2) || (((vCoord + V2(1,1) == pNewPos) || vCoord + V2(-1, 1) == pNewPos) && Piece.getCouleur() == 1) || (((vCoord + V2(1, -1) == pNewPos) || vCoord + V2(-1, -1) == pNewPos) && Piece.getCouleur() == 2)) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             if (G.Plateau.getPositionPiece(pNewPos) == 0 && vCoord.x == pNewPos.x) {
                 return true;
             }
-            else if(G.Plateau.getPositionPiece(pNewPos) != 0){
+            else if(G.Plateau.getPositionPiece(pNewPos) != 0 && vCoord.x != pNewPos.x){
                 return true;
             }
         }
@@ -1228,7 +1229,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 1)//tour
     {
         //Si horizontal
-        if (vCoord.x != pNewPos.x && vCoord.y == vCoord.y && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (vCoord.x != pNewPos.x && vCoord.y == pNewPos.y && pNewPos.x > 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             //Test droite
             if (vCoord.x < pNewPos.x) {
                 for (int i = vCoord.x + 1; i <= pNewPos.x; i++)
@@ -1260,7 +1261,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         }
 
         //Si vertical
-        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x > 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
 
             //Teste bas
             if (vCoord.y < pNewPos.y) {
@@ -1398,7 +1399,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 4)//dame
     {
         
-        return DeplacementPiece(_Piece(Piece.getCoord(),Piece.getCouleur(),1),pNewPos)|| DeplacementPiece(_Piece(Piece.getCoord(), Piece.getCouleur(), 3), pNewPos);
+        return DeplacementPiece(_Tour(Piece.getCoord(),Piece.getCouleur(),1),pNewPos)|| DeplacementPiece(_Fou(Piece.getCoord(), Piece.getCouleur(), 3), pNewPos);
     }
     if (Piece.getTypePiece() == 5)//roi
     {
@@ -1456,15 +1457,7 @@ void affichage_ecran_jeu() {
             }
         }
 
-    if (G2D::IsMouseLeftButtonPressed())
-    {
-        if (G.mouseIsActive)
-        {
-            G.pieces[G.pieceEncours].IdTex = G2D::InitTextureFromString(G.pieces[G.pieceEncours].Size, G.pieces[G.pieceEncours].Texture);
-            G.pieces[G.pieceEncours].Size = G.pieces[G.pieceEncours].Size * G.pieces[G.pieceEncours].Zoom * 1.5;
-            G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2((G.xMouse - G.pieces[G.pieceEncours].Size.x/2), G.yMouse - G.pieces[G.pieceEncours].Size.y / 2), G.pieces[G.pieceEncours].Size);
-        }
-    }
+
     //affichage pieces
     for (int i = 0; i<32;i++) {
         if (G.pieces[i].getEstVivant() && i!=G.pieceEncours) 
@@ -1472,6 +1465,15 @@ void affichage_ecran_jeu() {
             G.pieces[i].IdTex = G2D::InitTextureFromString(G.pieces[i].Size, G.pieces[i].Texture);
             G.pieces[i].Size = G.pieces[i].Size * G.pieces[i].Zoom;
             G2D::DrawRectWithTexture(G.pieces[i].IdTex, V2(G.pieces[i].getCoord().x * G.Lpix + 8, G.pieces[i].getCoord().y * G.Lpix + 2), G.pieces[i].Size);
+        }
+    }
+    if (G2D::IsMouseLeftButtonPressed())
+    {
+        if (G.mouseIsActive)
+        {
+            G.pieces[G.pieceEncours].IdTex = G2D::InitTextureFromString(G.pieces[G.pieceEncours].Size, G.pieces[G.pieceEncours].Texture);
+            G.pieces[G.pieceEncours].Size = G.pieces[G.pieceEncours].Size * G.pieces[G.pieceEncours].Zoom * 1.5;
+            G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2((G.xMouse - G.pieces[G.pieceEncours].Size.x / 2), G.yMouse - G.pieces[G.pieceEncours].Size.y / 2), G.pieces[G.pieceEncours].Size);
         }
     }
 }
@@ -1560,7 +1562,7 @@ int gestion_ecran_jeu() {
         G2D::GetMousePos(&G.xMouse, &G.yMouse);
         if (!G.mouseIsActive)
         {
-            if (G.getJoueur() == 1)
+            if (G.getJoueur())
             {
                 for (int i = 16; i < 32; i++) {
                     if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == V2((int)(G.xMouse/80),(int)(G.yMouse/80)))
@@ -1607,6 +1609,7 @@ int gestion_ecran_jeu() {
                     G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
                     
                 }
+                G.setJoueur();
             }
             G.pieceEncours = -1;
         }
