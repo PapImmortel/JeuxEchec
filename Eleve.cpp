@@ -79,12 +79,12 @@ struct _Piece {
     float Zoom;
     int IdTex;
     string Texture;
-    _Piece(V2 _Pos, int _couleur, int _TypePiece) {
+    _Piece(V2 _Pos, int _couleur) {
         pos = _Pos;
         couleur = _couleur;
         estVivant = true;
-        typePiece = _TypePiece;
     }
+    void setTypePiece(int _typePiece) { typePiece = _typePiece; }
     void setEstVivant() { estVivant = false; }
     bool getEstVivant() { return estVivant; }
     void setCoord(V2 Coord) { pos = Coord; }
@@ -203,9 +203,10 @@ struct _Cavalier : public _Piece {
         "[        KKKKKKKKKKKSSSKKKKKKKKKKKKKKKKK     ]"
         "[             KKKKKKKKKKKKKKKK               ]";
 
-    _Cavalier(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Cavalier(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(1.5);
+        setTypePiece(2);
         if (_couleur == 1)
             setTexture(CavalierBlanc);
         else
@@ -312,9 +313,10 @@ struct _Dame : public _Piece {
         "[         KKKKKKKKKKK       ]"
         ;
 
-    _Dame(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Dame(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(1.7);
+        setTypePiece(4);
         if (_couleur == 1)
             setTexture(reineBlanche);
         else
@@ -378,10 +380,10 @@ struct _Roi : public _Piece {
         "[ G KKKWBCBWKKK   ]"
         "[      KKKKK      ]";
 
-    _Roi(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Roi(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(2.8);
-
+        setTypePiece(5);
         if (_couleur == 1)
             setTexture(roiBlanc);
         else
@@ -464,10 +466,10 @@ struct _Tour : public _Piece {
         "[J+++J+++++133331+++++J+++J]"
         "[JJJJJJJJJJ111111JJJJJJJJJJ]";
 
-    _Tour(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Tour(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(2.1);
-
+        setTypePiece(1);
         if (_couleur == 1)
             setTexture(tourBlanche);
         else
@@ -671,10 +673,10 @@ struct _Fou : public _Piece {
         "[                    KKKKKKKKK                 KKKKKKKKK                     ]"
         ;
 
-    _Fou(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Fou(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(0.80);
-
+        setTypePiece(3);
         if (_couleur == 1)
             setTexture(fouBlanc);
         else
@@ -813,10 +815,10 @@ struct _Pion : public _Piece {
 
         ;
 
-    _Pion(V2 _Pos, int _couleur, int _TypePiece) : _Piece(_Pos, _couleur, _TypePiece)
+    _Pion(V2 _Pos, int _couleur) : _Piece(_Pos, _couleur)
     {
         setZoomSize(1.2);
-
+        setTypePiece(0);
         if (_couleur == 1)
             setTexture(pionBlanc);
         else
@@ -1168,45 +1170,44 @@ struct GameData {
     void setPieces() {
         pieces.clear();
 
-        pieces.push_back(_Pion(V2(0, 6), 2, 0));
-        pieces.push_back(_Pion(V2(1, 6), 2, 0));
-        pieces.push_back(_Pion(V2(2, 6), 2, 0));
-        pieces.push_back(_Pion(V2(3, 6), 2, 0));
-        pieces.push_back(_Pion(V2(4, 6), 2, 0));
-        pieces.push_back(_Pion(V2(5, 6), 2, 0));
-        pieces.push_back(_Pion(V2(6, 6), 2, 0));
-        pieces.push_back(_Pion(V2(7, 6), 2, 0));
+        pieces.push_back(_Pion(V2(0, 6), 2));
+        pieces.push_back(_Pion(V2(1, 6), 2));
+        pieces.push_back(_Pion(V2(2, 6), 2));
+        pieces.push_back(_Pion(V2(3, 6), 2));
+        pieces.push_back(_Pion(V2(4, 6), 2));
+        pieces.push_back(_Pion(V2(5, 6), 2));
+        pieces.push_back(_Pion(V2(6, 6), 2));
+        pieces.push_back(_Pion(V2(7, 6), 2));
 
 
 
-        pieces.push_back(_Tour(V2(0, 7), 2, 1));
-        pieces.push_back(_Tour(V2(7, 7), 2, 1));
-        pieces.push_back(_Cavalier(V2(1, 7), 2, 2));
-        pieces.push_back(_Cavalier(V2(6, 7), 2, 2));
-        pieces.push_back(_Fou(V2(2, 7), 2, 3));
-        pieces.push_back(_Fou(V2(5, 7), 2, 3));
-        pieces.push_back(_Dame(V2(3, 7), 2, 4));
-        pieces.push_back(_Roi(V2(4, 7), 2, 5));
+        pieces.push_back(_Tour(V2(0, 7), 2));
+        pieces.push_back(_Tour(V2(7, 7), 2));
+        pieces.push_back(_Cavalier(V2(1, 7), 2));
+        pieces.push_back(_Cavalier(V2(6, 7), 2));
+        pieces.push_back(_Fou(V2(2, 7), 2));
+        pieces.push_back(_Fou(V2(5, 7), 2));
+        pieces.push_back(_Dame(V2(3, 7), 2));
+        pieces.push_back(_Roi(V2(4, 7), 2));
 
-        pieces.push_back(_Pion(V2(0, 1), 1, 0));
-        pieces.push_back(_Pion(V2(1, 1), 1, 0));
-        pieces.push_back(_Pion(V2(2, 1), 1, 0));
-        pieces.push_back(_Pion(V2(3, 1), 1, 0));
-        pieces.push_back(_Pion(V2(4, 1), 1, 0));
-        pieces.push_back(_Pion(V2(5, 1), 1, 0));
-        pieces.push_back(_Pion(V2(6, 1), 1, 0));
-        pieces.push_back(_Pion(V2(7, 1), 1, 0));
+        pieces.push_back(_Pion(V2(0, 1), 1));
+        pieces.push_back(_Pion(V2(1, 1), 1));
+        pieces.push_back(_Pion(V2(2, 1), 1));
+        pieces.push_back(_Pion(V2(3, 1), 1));
+        pieces.push_back(_Pion(V2(4, 1), 1));
+        pieces.push_back(_Pion(V2(5, 1), 1));
+        pieces.push_back(_Pion(V2(6, 1), 1));
+        pieces.push_back(_Pion(V2(7, 1), 1));
 
 
-
-        pieces.push_back(_Tour(V2(0, 0), 1, 1));
-        pieces.push_back(_Tour(V2(7, 0), 1, 1));
-        pieces.push_back(_Cavalier(V2(1, 0), 1, 2));
-        pieces.push_back(_Cavalier(V2(6, 0), 1, 2));
-        pieces.push_back(_Fou(V2(2, 0), 1, 3));
-        pieces.push_back(_Fou(V2(5, 0), 1, 3));
-        pieces.push_back(_Dame(V2(3, 0), 1, 4));
-        pieces.push_back(_Roi(V2(4, 0), 1, 5));
+        pieces.push_back(_Tour(V2(0, 0), 1));
+        pieces.push_back(_Tour(V2(7, 0), 1));
+        pieces.push_back(_Cavalier(V2(1, 0), 1));
+        pieces.push_back(_Cavalier(V2(6, 0), 1));
+        pieces.push_back(_Fou(V2(2, 0), 1));
+        pieces.push_back(_Fou(V2(5, 0), 1));
+        pieces.push_back(_Dame(V2(3, 0), 1));
+        pieces.push_back(_Roi(V2(4, 0), 1));
 
 
         for (_Piece& piece : pieces) {
@@ -1410,7 +1411,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 4)//dame
     {
         
-        return DeplacementPiece(_Tour(Piece.getCoord(),Piece.getCouleur(),1),pNewPos)|| DeplacementPiece(_Fou(Piece.getCoord(), Piece.getCouleur(), 3), pNewPos);
+        return DeplacementPiece(_Tour(Piece.getCoord(),Piece.getCouleur()),pNewPos)|| DeplacementPiece(_Fou(Piece.getCoord(), Piece.getCouleur()), pNewPos);
     }
     if (Piece.getTypePiece() == 5)//roi
     {
@@ -1430,7 +1431,9 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                             }
                         }
                     }
-                    if (DeplacementPiece(_Roi(G.pieces[15].getCoord(), 2, 6), pNewPos)) 
+                    _Roi autreRoi = _Roi(G.pieces[15].getCoord(), 2);
+                    autreRoi.setTypePiece(6);
+                    if (DeplacementPiece(autreRoi, pNewPos)) 
                     {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
@@ -1448,7 +1451,9 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                             }
                         }
                     }
-                    if (DeplacementPiece(_Roi(G.pieces[31].getCoord(), 1, 6), pNewPos)) {
+                    _Roi autreRoi = _Roi(G.pieces[31].getCoord(), 1);
+                    autreRoi.setTypePiece(6);
+                    if (DeplacementPiece(autreRoi, pNewPos)) {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                         return false; 
@@ -1691,7 +1696,7 @@ int gestion_ecran_jeu() {
                     
                 }
                 if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
-                    G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur(), 4);
+                    G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
                 }
                 G.setJoueur();
             }
