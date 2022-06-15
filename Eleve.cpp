@@ -1215,7 +1215,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         return false;
     if (Piece.getTypePiece() == 0)//pion
     {
-        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6)) && Piece.getCouleur() == 2) || (vCoord + V2(1,1) == pNewPos || vCoord + V2(-1, 1) == pNewPos) || (vCoord + V2(1, -1) == pNewPos || vCoord + V2(-1, -1) == pNewPos)) && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9) {
+        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6)) && Piece.getCouleur() == 2) || (vCoord + V2(1,1) == pNewPos || vCoord + V2(-1, 1) == pNewPos) || (vCoord + V2(1, -1) == pNewPos || vCoord + V2(-1, -1) == pNewPos)) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             if (G.Plateau.getPositionPiece(pNewPos) == 0 && vCoord.x == pNewPos.x) {
                 return true;
             }
@@ -1228,7 +1228,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 1)//tour
     {
         //Si horizontal
-        if (vCoord.x != pNewPos.x && vCoord.y == vCoord.y && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9) {
+        if (vCoord.x != pNewPos.x && vCoord.y == vCoord.y && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y >= 0 && pNewPos.y < 8) {
             //Test droite
             if (vCoord.x < pNewPos.x) {
                 for (int i = vCoord.x + 1; i <= pNewPos.x; i++)
@@ -1260,7 +1260,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         }
 
         //Si vertical
-        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9) {
+        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y >= 0 && pNewPos.y < 8) {
 
             //Teste bas
             if (vCoord.y < pNewPos.y) {
@@ -1296,7 +1296,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     }
     if (Piece.getTypePiece() == 2)//cavalier
     {
-        if ((vCoord + V2(2, 1) == pNewPos || vCoord + V2(1, 2) == pNewPos || vCoord + V2(-2, -1) == pNewPos || vCoord + V2(-1, -2) == pNewPos || vCoord + V2(2, -1) == pNewPos || vCoord + V2(-2, 1) == pNewPos || vCoord + V2(1, -2) == pNewPos || vCoord + V2(-1, 2) == pNewPos) && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9)
+        if ((vCoord + V2(2, 1) == pNewPos || vCoord + V2(1, 2) == pNewPos || vCoord + V2(-2, -1) == pNewPos || vCoord + V2(-1, -2) == pNewPos || vCoord + V2(2, -1) == pNewPos || vCoord + V2(-2, 1) == pNewPos || vCoord + V2(1, -2) == pNewPos || vCoord + V2(-1, 2) == pNewPos) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8)
             cout << "nice" << endl;
             if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur())
                 return true;
@@ -1310,7 +1310,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         int nb_move = 0;
 
         //Verifie si le mouvement est une diagonale
-        if (abs(pNewPos.x - vCoord.x) == abs(pNewPos.y - vCoord.y) && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9) {
+        if (abs(pNewPos.x - vCoord.x) == abs(pNewPos.y - vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             pos_x = vCoord.x;
             pos_y = vCoord.y;
 
@@ -1403,7 +1403,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     }
     if (Piece.getTypePiece() == 5)//roi
     {
-        if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x > 0 && pNewPos.x < 9 && pNewPos.y > 0 && pNewPos.y < 9)
+        if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8)
             if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur())
                 return true;
         return false;
