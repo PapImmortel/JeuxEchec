@@ -1588,48 +1588,30 @@ int gestion_ecran_jeu() {
     {
         if (G.mouseIsActive)
         {
-            G.setMouseIsActive(false);            
+            G.setMouseIsActive(false);
             if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
-                if (G.pieces[G.pieceEncours].getCouleur() == 1) {
 
-                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
-                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "1");
-                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-                    }
-                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 2) {
-                        for (_Piece& piece : G.pieces) {
-                            if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
-                                piece.setEstVivant();
-                            }
-                        }
-                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "1");
-                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-                    }
+                if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
+                    G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
+                    G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                    G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
                 }
-                if (G.pieces[G.pieceEncours].getCouleur() == 2) {
-
-                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
-                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "2");
-                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-                    }
-                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 1) {
-                        for (_Piece& piece : G.pieces) {
-                            if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
-                                piece.setEstVivant();
-                            }
+                if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
+                    for (_Piece& piece : G.pieces) {
+                        if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
+                            piece.setEstVivant();
                         }
-                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), "2");
-                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
                     }
+                    G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
+                    G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                    G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                    
                 }
             }
-        G.pieceEncours = -1;
+            G.pieceEncours = -1;
         }
-    }    return 3;
+    }    
+    return 3;
 }
 //end
 int gestion_ecran_game_over() {

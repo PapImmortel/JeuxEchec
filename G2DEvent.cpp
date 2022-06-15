@@ -283,6 +283,7 @@ void G2D::Run(void logic(), void render())
 	glutSpecialUpFunc(keySpecialUp);
 	glutMouseFunc(mouse);
 	glutMotionFunc(mouseMove);
+	glutPassiveMotionFunc(mouseMove);
 
 
 	// logic
