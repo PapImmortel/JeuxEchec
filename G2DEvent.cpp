@@ -168,18 +168,18 @@ bool G2D::IsMouseRightButtonPressed()
 {
 	return mousePressed[GLUT_RIGHT_BUTTON];
 }
-
-void mouse(int button, int state, int x, int y)
-{
-	if (state == GLUT_DOWN)   { mousePressed[button] = true;   mouseClicked[button] = true; }
-	if (state == GLUT_UP)     { mousePressed[button] = false;  mouseClicked[button] = false; }
-}
-
 void mouseMove(int x, int y)
 {
 	MouseX = x;
 	MouseY = Wheight - y;
 }
+void mouse(int button, int state, int x, int y)
+{
+	if (state == GLUT_DOWN) { mousePressed[button] = true;   mouseClicked[button] = true; mouseMove(x, y); }
+	if (state == GLUT_UP)     { mousePressed[button] = false;  mouseClicked[button] = false; mouseMove(x, y);}
+}
+
+
 
 
 

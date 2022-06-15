@@ -44,14 +44,14 @@ struct _plateau {
         "[77777777]"
         "[77777777]"
         "[77777777]";
-    string texturePossible = "[ZXZXZXZX]"
-        "[XZXZXZXZ]"
-        "[ZXZXZXZX]"
-        "[XZXZXZXZ]"
-        "[ZXZXZXZX]"
-        "[XZXZXZXZ]"
-        "[ZXZXZXZX]"
-        "[XZXZXZXZ]";
+    string texturePossible = "[        ]"
+        "[   GG   ]"
+        "[  G  G  ]"
+        "[ G GG G ]"
+        "[ G GG G ]"
+        "[  G  G  ]"
+        "[   GG   ]"
+        "[        ]";
 
     string positionPiece = "22222222"
         "22222222"
@@ -79,10 +79,14 @@ struct _Piece {
     float Zoom;
     int IdTex;
     string Texture;
+    bool noMove;
+    void setNoMove(bool _noMove) { noMove = _noMove; }
+    bool getNoMove() { return noMove; }
     _Piece(V2 _Pos, int _couleur) {
         pos = _Pos;
         couleur = _couleur;
         estVivant = true;
+        bool noMove = true;
     }
     void setTypePiece(int _typePiece) { typePiece = _typePiece; }
     void setEstVivant() { estVivant = false; }
@@ -1465,6 +1469,21 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 
             }
         }
+        else if (Piece.getNoMove())
+        {
+            if ((vCoord.y == pNewPos.y && vCoord.x + 2 == pNewPos.x)) {
+                if (Piece.getCouleur() == 1 && G.pieces[25].getNoMove()) {
+                    cout << "maybe" << endl;
+                    cout << " first" << DeplacementPiece(G.pieces[25], V2(0, 5)) << "deux" << DeplacementPiece(Piece, V2(0, 5)) << "dernier" << DeplacementPiece(_Roi(V2(0, 5), Piece.getCouleur()), V2(0, 6));
+                    return DeplacementPiece(G.pieces[25], V2(0, 5)) && DeplacementPiece(Piece, V2(0, 5))&& DeplacementPiece(_Roi(V2(0,5),Piece.getCouleur()), V2(0, 6));
+                }
+            }
+            else if (vCoord.y == pNewPos.y && vCoord.x - 2 == pNewPos.x) {
+                if (Piece.getCouleur() == 1 && G.pieces[24].getNoMove()) {
+                    return DeplacementPiece(G.pieces[24], V2(0, 3)) && DeplacementPiece(Piece, V2(0, 3)) && DeplacementPiece(_Roi(V2(0, 3), Piece.getCouleur()), V2(0, 2));
+                }
+            }
+        }
 
         return false;
     }
@@ -1532,14 +1551,7 @@ void affichage_ecran_jeu() {
                     G.Size);
             }
         }
-    if (G.pieceEncours != -1) {
-        for (V2 position : G.zonesJouables) {
-            int xx = position.x * G.Lpix - 12;
-            int yy = position.y * G.Lpix;
-            G2D::DrawRectWithTexture(G.IdTexPossible, V2(xx, yy),
-                G.Size);
-        }
-    }
+    
     
 
     //affichage pieces
@@ -1551,6 +1563,14 @@ void affichage_ecran_jeu() {
             G2D::DrawRectWithTexture(G.pieces[i].IdTex, V2(G.pieces[i].getCoord().x * G.Lpix + 8, G.pieces[i].getCoord().y * G.Lpix + 2), G.pieces[i].Size);
         }
     }
+    if (G.pieceEncours != -1) {
+        for (V2 position : G.zonesJouables) {
+            int xx = position.x * G.Lpix - 12;
+            int yy = position.y * G.Lpix;
+            G2D::DrawRectWithTexture(G.IdTexPossible, V2(xx, yy),
+                G.Size);
+        }
+    }
     if (G2D::IsMouseLeftButtonPressed())
     {
         if (G.mouseIsActive)
@@ -1560,6 +1580,7 @@ void affichage_ecran_jeu() {
             G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2((G.xMouse - G.pieces[G.pieceEncours].Size.x / 2), G.yMouse - G.pieces[G.pieceEncours].Size.y / 2), G.pieces[G.pieceEncours].Size);
         }
     }
+
 }
 //end
 void affichage_ecran_game_over() {
@@ -1698,6 +1719,11 @@ int gestion_ecran_jeu() {
                 if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
                     G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
                 }
+                if (G.pieces[G.pieceEncours].getNoMove()==true) {
+                    G.pieces[G.pieceEncours].setNoMove(false);
+                }
+
+
                 G.setJoueur();
             }
             G.pieceEncours = -1;
