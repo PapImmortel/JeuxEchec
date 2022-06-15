@@ -44,6 +44,16 @@ struct _plateau {
         "[77777777]"
         "[77777777]"
         "[77777777]";
+    string texturePossible = "[ZXZXZXZX]"
+        "[XZXZXZXZ]"
+        "[ZXZXZXZX]"
+        "[XZXZXZXZ]"
+        "[ZXZXZXZX]"
+        "[XZXZXZXZ]"
+        "[ZXZXZXZX]"
+        "[XZXZXZXZ]"
+        ;
+
 
     string positionPiece = "22222222"
         "22222222"
@@ -1148,6 +1158,9 @@ struct GameData {
     V2 Size;
     int IdTexMur;
     int IdTexSol;
+    int IdTexPossible;
+    vector<V2> zonesJouables = {};
+    
     bool mouseIsActive = false;
     int getJoueur() { return joueur; }
     void setJoueur() { joueur=!joueur; }
@@ -1220,7 +1233,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
             if (G.Plateau.getPositionPiece(pNewPos) == 0 && vCoord.x == pNewPos.x) {
                 return true;
             }
-            else if(G.Plateau.getPositionPiece(pNewPos) != 0 && vCoord.x != pNewPos.x){
+            else if(G.Plateau.getPositionPiece(pNewPos) != 0 && G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur() && vCoord.x != pNewPos.x){
                 return true;
             }
         }
@@ -1410,7 +1423,17 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     }
     return false;
 }
-
+void setZonesJouables(_Piece pieceActuelle) {
+    G.zonesJouables.clear();
+    for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
+            if (DeplacementPiece(pieceActuelle, V2(x, y)))
+            {
+                G.zonesJouables.push_back(V2(x, y));
+            }
+        }
+    }
+}
 void affichage_ecran_accueil() {
     G2D::DrawStringFontMono(V2(50, 400), "Jeux d'echec",
         20, 4, Color::White);
@@ -1456,7 +1479,15 @@ void affichage_ecran_jeu() {
                     G.Size);
             }
         }
-
+    if (G.pieceEncours != -1) {
+        for (V2 position : G.zonesJouables) {
+            int xx = position.x * G.Lpix - 12;
+            int yy = position.y * G.Lpix;
+            G2D::DrawRectWithTexture(G.IdTexPossible, V2(xx, yy),
+                G.Size);
+        }
+    }
+    
 
     //affichage pieces
     for (int i = 0; i<32;i++) {
@@ -1569,6 +1600,7 @@ int gestion_ecran_jeu() {
                     {
                         G.pieceEncours = i;
                         G.setMouseIsActive(true);
+                        setZonesJouables(G.pieces[G.pieceEncours]);
                         break;
                     }
                 }
@@ -1580,6 +1612,7 @@ int gestion_ecran_jeu() {
                     {
                         G.pieceEncours = i;
                         G.setMouseIsActive(true);
+                        setZonesJouables(G.pieces[G.pieceEncours]);
                         break;
                     }
                 }
@@ -1660,6 +1693,8 @@ void AssetsInit() {
         G2D::InitTextureFromString(G.Size, G.Plateau.textureMur);
     G.IdTexSol =
         G2D::InitTextureFromString(G.Size, G.Plateau.textureSol);
+    G.IdTexPossible =
+        G2D::InitTextureFromString(G.Size, G.Plateau.texturePossible);
     G.Size =
         G.Size * 10; // on peut zoomer la taille du sprite
 }
