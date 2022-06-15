@@ -1221,7 +1221,7 @@ GameData G;
 
 
 bool DeplacementPiece(_Piece Piece, V2 pNewPos){
-    //0 = pion, 1 = tour, 2 = cavalier, 3 = fou, 4 =dame , 5 = roi
+    //0 = pion, 1 = tour, 2 = cavalier, 3 = fou, 4 =dame , 5 = roi, 6 = roi pour test
     V2 vCoord = Piece.getCoord();
     if (vCoord == pNewPos)
         return false;
@@ -1329,7 +1329,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 pos_x = vCoord.x + 1;
                 pos_y = vCoord.y + 1;
 
-                // Vérification si le mouvement est valide case par case (diagonale vers bas et droite).
+                // Vérification si le mouvement est valide case par case (diagonale vers haut et droite).
                 nb_move = abs(pNewPos.x - vCoord.x);
                 for (int i = 0; i <= nb_move; i++) {
                     if (G.Plateau.getPositionPiece(V2(pos_x, pos_y)) == 0 || G.Plateau.getPositionPiece(V2(pos_x, pos_y)) != Piece.getCouleur()) {
@@ -1349,7 +1349,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 pos_x = vCoord.x - 1;
                 pos_y = vCoord.y - 1;
 
-                // Vérification si le mouvement est valide case par case (diagonale vers haut et gauche).
+                // Vérification si le mouvement est valide case par case (diagonale vers bas et gauche).
                 nb_move = abs(pNewPos.x - vCoord.x);
                 for (int i = 0; i <= nb_move; i++) {
                     if (G.Plateau.getPositionPiece(V2(pos_x, pos_y)) == 0 || G.Plateau.getPositionPiece(V2(pos_x, pos_y)) != Piece.getCouleur()) {
@@ -1369,7 +1369,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 pos_x = vCoord.x + 1;
                 pos_y = vCoord.y - 1;
 
-                // Vérification si le mouvement est valide case par case (diagonale vers haut et droite).
+                // Vérification si le mouvement est valide case par case (diagonale vers bas et droite).
                 nb_move = abs(pNewPos.x - vCoord.x);
                 for (int i = 0; i <= nb_move; i++) {
                     if (G.Plateau.getPositionPiece(V2(pos_x, pos_y)) == 0 || G.Plateau.getPositionPiece(V2(pos_x, pos_y)) != Piece.getCouleur()) {
@@ -1389,7 +1389,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 pos_x = vCoord.x - 1;
                 pos_y = vCoord.y + 1;
 
-                // Vérification si le mouvement est valide case par case (diagonale vers bas et gauche).
+                // Vérification si le mouvement est valide case par case (diagonale vers haut et gauche).
                 nb_move = abs(pNewPos.x - vCoord.x);
                 for (int i = 0; i <= nb_move; i++) {
                     if (G.Plateau.getPositionPiece(V2(pos_x, pos_y)) == 0 || G.Plateau.getPositionPiece(V2(pos_x, pos_y)) != Piece.getCouleur()) {
@@ -1416,17 +1416,56 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     {
         if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8){
             if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur()) {
-                for (_Piece& piece : G.pieces) {
-                    if (piece.getCouleur() != Piece.getCouleur() && piece.getEstVivant()) {
+                char pastPlateau = G.Plateau.getPositionPiece(pNewPos);
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
+                if (Piece.getCouleur()==1) {
+                    for (int i = 0; i < 15;i++) {
+                        if (G.pieces[i].getCouleur() != Piece.getCouleur() && G.pieces[i].getEstVivant()) {
 
-                        if (DeplacementPiece(piece, pNewPos)) {
-
-                            return false;
+                            if (DeplacementPiece(G.pieces[i], pNewPos)) {
+                                G.Plateau.setPositionPiece(pNewPos.x,pNewPos.y,to_string(pastPlateau));
+                                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                                return false;
+                            }
                         }
                     }
+                    if (DeplacementPiece(_Roi(G.pieces[15].getCoord(), 2, 6), pNewPos)) 
+                    {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        return false;
+                    }
                 }
+                else if (Piece.getCouleur() == 2) {
+                    for (int i = 16; i < 31; i++) {
+                        if (G.pieces[i].getCouleur() != Piece.getCouleur() && G.pieces[i].getEstVivant()) {
+
+                            if (DeplacementPiece(G.pieces[i], pNewPos)) {
+                                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                                return false;
+                            }
+                        }
+                    }
+                    if (DeplacementPiece(_Roi(G.pieces[31].getCoord(), 1, 6), pNewPos)) {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        return false; 
+                    }
+                }
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 return true;
+                
             }
+        }
+
+        return false;
+    }
+    if (Piece.getTypePiece() == 6) {
+        if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
+            return true;
         }
         return false;
     }
@@ -1640,7 +1679,7 @@ int gestion_ecran_jeu() {
                     G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
                     G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
                 }
-                if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
+                else if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
                     for (_Piece& piece : G.pieces) {
                         if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
                             piece.setEstVivant();
@@ -1654,6 +1693,7 @@ int gestion_ecran_jeu() {
                 G.setJoueur();
             }
             G.pieceEncours = -1;
+            cout << G.Plateau.getPlateau() << endl;
         }
     }    
     return 3;
