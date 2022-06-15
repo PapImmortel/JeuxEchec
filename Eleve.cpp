@@ -1227,7 +1227,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         return false;
     if (Piece.getTypePiece() == 0)//pion
     {
-        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6)) && Piece.getCouleur() == 2) || (((vCoord + V2(1,1) == pNewPos) || vCoord + V2(-1, 1) == pNewPos) && Piece.getCouleur() == 1) || (((vCoord + V2(1, -1) == pNewPos) || vCoord + V2(-1, -1) == pNewPos) && Piece.getCouleur() == 2)) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (((((vCoord + V2(0, 1)==pNewPos )|| (vCoord + V2(0, 2) == pNewPos && vCoord.y == 1 && G.Plateau.getPositionPiece(vCoord + V2(0, 1))==0)) && Piece.getCouleur() == 1 )|| (((vCoord + V2(0,-1) == pNewPos) || (vCoord + V2(0, -2) == pNewPos && vCoord.y == 6) && G.Plateau.getPositionPiece(vCoord + V2(0, -1)) == 0) && Piece.getCouleur() == 2) || (((vCoord + V2(1,1) == pNewPos) || vCoord + V2(-1, 1) == pNewPos) && Piece.getCouleur() == 1) || (((vCoord + V2(1, -1) == pNewPos) || vCoord + V2(-1, -1) == pNewPos) && Piece.getCouleur() == 2)) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             if (G.Plateau.getPositionPiece(pNewPos) == 0 && vCoord.x == pNewPos.x) {
                 return true;
             }
@@ -1693,7 +1693,6 @@ int gestion_ecran_jeu() {
                 G.setJoueur();
             }
             G.pieceEncours = -1;
-            cout << G.Plateau.getPlateau() << endl;
         }
     }    
     return 3;
