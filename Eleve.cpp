@@ -51,9 +51,7 @@ struct _plateau {
         "[ZXZXZXZX]"
         "[XZXZXZXZ]"
         "[ZXZXZXZX]"
-        "[XZXZXZXZ]"
-        ;
-
+        "[XZXZXZXZ]";
 
     string positionPiece = "22222222"
         "22222222"
