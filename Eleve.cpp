@@ -1414,9 +1414,20 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     }
     if (Piece.getTypePiece() == 5)//roi
     {
-        if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8)
-            if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur())
+        if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8){
+            if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur()) {
+                for (_Piece& piece : G.pieces) {
+                    if (piece.getCouleur() != Piece.getCouleur() && piece.getEstVivant()) {
+
+                        if (DeplacementPiece(piece, pNewPos)) {
+
+                            return false;
+                        }
+                    }
+                }
                 return true;
+            }
+        }
         return false;
     }
     return false;
