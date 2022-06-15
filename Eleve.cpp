@@ -1229,7 +1229,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 1)//tour
     {
         //Si horizontal
-        if (vCoord.x != pNewPos.x && vCoord.y == pNewPos.y && pNewPos.x > 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (vCoord.x != pNewPos.x && vCoord.y == pNewPos.y && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
             //Test droite
             if (vCoord.x < pNewPos.x) {
                 for (int i = vCoord.x + 1; i <= pNewPos.x; i++)
@@ -1261,7 +1261,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         }
 
         //Si vertical
-        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x > 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
+        if (vCoord.y != pNewPos.y && vCoord.x == pNewPos.x && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8) {
 
             //Teste bas
             if (vCoord.y < pNewPos.y) {
