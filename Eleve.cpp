@@ -80,6 +80,7 @@ struct _Piece {
     int IdTex;
     string Texture;
     bool noMove;
+    int TimeDead = 0;
     void setNoMove(bool _noMove) { noMove = _noMove; }
     bool getNoMove() { return noMove; }
     _Piece(V2 _Pos, int _couleur) {
@@ -1148,7 +1149,16 @@ struct Dessin {
         "[                  KKKKKKKKKKKK             KKKRRRRRRRRRKK                   ]"
         "[                    KKKKKKKKK                 KKKKKKKKK                     ]";
 };
- 
+
+struct deplacement {
+    V2 start;
+    V2 Fin;
+    deplacement(V2 pS, V2 pF)
+    {
+        start = pS;
+        Fin = pF;
+    }
+}; 
 struct GameData {
 
     int ecran = 0;
@@ -1163,6 +1173,7 @@ struct GameData {
     int IdTexMur;
     int IdTexSol;
     int IdTexPossible;
+    deplacement test = deplacement(V2(), V2());
     vector<V2> zonesJouables = {};
     
     bool mouseIsActive = false;
@@ -1533,6 +1544,156 @@ void setZonesJouables(_Piece pieceActuelle) {
                 G.zonesJouables.push_back(V2(x, y));
             }
         }
+    }
+}
+//IA 
+
+int point()
+{
+    int point = 0;
+    for (int i = 0; i < 32; i++)
+    {
+
+        _Piece P = G.pieces[i];
+        if (i < 16)
+        {
+            if (P.estVivant)
+            {
+                if (P.typePiece == 0) { point += 1; }
+                if (P.typePiece == 2) { point += 3; }
+                if (P.typePiece == 1) { point += 5; }
+                if (P.typePiece == 3) { point += 3; }
+                if (P.typePiece == 4) { point += 8; }
+                if (P.typePiece == 5) { point += 100; }
+
+            }
+        }
+        else
+        {
+            if (P.estVivant)
+            {
+                if (P.typePiece == 0) { point -= 1; }
+                if (P.typePiece == 2) { point -= 3; }
+                if (P.typePiece == 1) { point -= 5; }
+                if (P.typePiece == 3) { point -= 3; }
+                if (P.typePiece == 4) { point -= 8; }
+                if (P.typePiece == 5) { point -= 100; }
+
+            }
+        }
+
+    }
+    return point;
+}
+deplacement changePos(_Piece* piece, V2 pos)
+{
+    deplacement D = deplacement(piece->pos, pos);
+    piece->pos = pos;
+    for (_Piece& P : G.pieces)
+    {
+        if (!P.estVivant)
+        {
+            P.TimeDead += 1;
+        }
+        if (P.pos == pos && P.estVivant)
+        {
+            P.estVivant = false;
+        }
+    }
+    return D;
+}
+void changeBack(deplacement D)
+{
+    for (int i = 0; i < 32; i++)
+    {
+
+        std::cout << "(" << G.pieces[i].pos.x << G.pieces[i].pos.y << ";" << D.start.x << D.start.y << ")" << endl;
+        if (G.pieces[i].pos == D.Fin)
+        {
+            if (G.pieces[i].estVivant)
+            {
+                changePos(&G.pieces[i], D.start);
+
+            }
+            else if (!G.pieces[i].estVivant && G.pieces[i].TimeDead == 0)
+            {
+                G.pieces[i].estVivant = true;
+            }
+        }
+
+    }
+}
+void coup()
+{
+    vector < deplacement > CP;
+    G.test = changePos(&G.pieces[14], V2(5, 3));
+    std::cout << "(" << G.test.start.x << G.test.start.y << ";" << G.test.Fin.x << G.test.Fin.y << ")" << endl;
+
+    for (int i = 0; i < 32; i++)
+    {
+
+        std::cout << "(" << G.pieces[i].pos.x << G.pieces[i].pos.y << ";" << G.test.start.x << G.test.start.y << ")" << endl;
+        if (G.pieces[i].pos == G.test.Fin)
+        {
+            if (G.pieces[i].estVivant)
+            {
+                changePos(&G.pieces[i], G.test.start);
+
+            }
+            else if (!G.pieces[i].estVivant && G.pieces[i].TimeDead == 0)
+            {
+                G.pieces[i].estVivant = true;
+            }
+        }
+
+    }
+    int p = point();
+    std::cout << p << endl;
+
+}
+vector<deplacement> DePossible(int joueur)
+{
+    vector < deplacement > DP = {};
+    if (joueur == 1)
+    {
+        for (int i = 15; i < 32; i++)
+        {
+            _Piece vPiece = G.pieces[i];
+            for (int k = 0; k < 8; k++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+
+                    if (DeplacementPiece(vPiece, V2(k, j)))
+                    {
+                        DP.push_back(deplacement(vPiece.pos, V2(k, j)));
+                        std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                    }
+
+                }
+            }
+        }
+        return DP;
+    }
+    else
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            _Piece vPiece = G.pieces[i];
+            for (int k = 0; k < 8; k++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+
+                    if (DeplacementPiece(vPiece, V2(k, j)))
+                    {
+                        DP.push_back(deplacement(vPiece.pos, V2(k, j)));
+                        std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                    }
+                }
+            }
+        }
+        return DP;
     }
 }
 void affichage_ecran_accueil() {
