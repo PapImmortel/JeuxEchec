@@ -1472,15 +1472,44 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
         else if (Piece.getNoMove())
         {
             if ((vCoord.y == pNewPos.y && vCoord.x + 2 == pNewPos.x)) {
-                if (Piece.getCouleur() == 1 && G.pieces[25].getNoMove()) {
-                    cout << "maybe" << endl;
-                    cout << " first" << DeplacementPiece(G.pieces[25], V2(0, 5)) << "deux" << DeplacementPiece(Piece, V2(0, 5)) << "dernier" << DeplacementPiece(_Roi(V2(0, 5), Piece.getCouleur()), V2(0, 6));
-                    return DeplacementPiece(G.pieces[25], V2(0, 5)) && DeplacementPiece(Piece, V2(0, 5))&& DeplacementPiece(_Roi(V2(0,5),Piece.getCouleur()), V2(0, 6));
+                if (Piece.getCouleur() == 1 && G.pieces[25].getNoMove() && G.pieces[25].getEstVivant()) {
+                    //cout << "maybe" << endl;
+                    //cout<< "dernier" << DeplacementPiece(Piece, V2(6, 0));
+
+                    if (DeplacementPiece(G.pieces[25], V2(5, 0)) && DeplacementPiece(Piece, V2(5, 0)))
+                    {
+                        
+                        return true;
+                    }
+                }
+                else if (Piece.getCouleur() == 2 && G.pieces[9].getNoMove() && G.pieces[9].getEstVivant()) {
+                    //cout << "maybe" << endl;
+                    //cout<< "dernier" << DeplacementPiece(Piece, V2(6, 0));
+
+                    if (DeplacementPiece(G.pieces[9], V2(5, 7)) && DeplacementPiece(Piece, V2(5, 7)))
+                    {
+                        
+                        return true;
+                    }
                 }
             }
             else if (vCoord.y == pNewPos.y && vCoord.x - 2 == pNewPos.x) {
-                if (Piece.getCouleur() == 1 && G.pieces[24].getNoMove()) {
-                    return DeplacementPiece(G.pieces[24], V2(0, 3)) && DeplacementPiece(Piece, V2(0, 3)) && DeplacementPiece(_Roi(V2(0, 3), Piece.getCouleur()), V2(0, 2));
+                if (Piece.getCouleur() == 1 && G.pieces[24].getNoMove() && G.pieces[24].getEstVivant()) {
+                    if (DeplacementPiece(G.pieces[24], V2(3, 0)) && DeplacementPiece(Piece, V2(3, 0)))
+                    {
+                        
+                        return true;
+                    }
+                }
+                else if (Piece.getCouleur() == 2 && G.pieces[8].getNoMove() && G.pieces[8].getEstVivant()) {
+                    //cout << "maybe" << endl;
+                    //cout<< "dernier" << DeplacementPiece(Piece, V2(6, 0));
+
+                    if (DeplacementPiece(G.pieces[8], V2(3, 7)) && DeplacementPiece(Piece, V2(3, 7)))
+                    {
+                        
+                        return true;
+                    }
                 }
             }
         }
@@ -1701,6 +1730,32 @@ int gestion_ecran_jeu() {
             if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
 
                 if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
+                    if (G.pieces[G.pieceEncours].getTypePiece() == 5) {
+                        if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
+                            if (G.pieces[G.pieceEncours].getCouleur() == 1) {
+                                G.Plateau.setPositionPiece(5, 0, "1");
+                                G.Plateau.setPositionPiece(7, 0, "0");
+                                G.pieces[25].setCoord(V2(5, 0));
+                            }
+                            else{
+                                G.Plateau.setPositionPiece(5, 7, "2");
+                                G.Plateau.setPositionPiece(7, 7, "0");
+                                G.pieces[9].setCoord(V2(5, 7));
+                            }
+                        }
+                        else if ((G.pieces[G.pieceEncours].getCoord().x - 2 == (int)(G.xMouse / 80))) {
+                            if (G.pieces[G.pieceEncours].getCouleur() == 1) {
+                                G.Plateau.setPositionPiece(3, 0, "1");
+                                G.Plateau.setPositionPiece(0, 0, "0");
+                                G.pieces[24].setCoord(V2(3, 0));
+                            }
+                            else {
+                                G.Plateau.setPositionPiece(3, 7, "2");
+                                G.Plateau.setPositionPiece(0, 7, "0");
+                                G.pieces[8].setCoord(V2(3, 7));
+                            }
+                        }
+                    }
                     G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
                     G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
                     G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
@@ -1719,10 +1774,9 @@ int gestion_ecran_jeu() {
                 if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
                     G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
                 }
-                if (G.pieces[G.pieceEncours].getNoMove()==true) {
+                if (G.pieces[G.pieceEncours].getNoMove()) {
                     G.pieces[G.pieceEncours].setNoMove(false);
                 }
-
 
                 G.setJoueur();
             }
