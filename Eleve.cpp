@@ -1480,7 +1480,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 
             }
         }
-        else if (Piece.getNoMove())
+        else if (Piece.getNoMove())//TEst pour le roque
         {
             if ((vCoord.y == pNewPos.y && vCoord.x + 2 == pNewPos.x)) {
                 if (Piece.getCouleur() == 1 && G.pieces[25].getNoMove() && G.pieces[25].getEstVivant()) {
@@ -1942,7 +1942,7 @@ int gestion_ecran_jeu() {
             if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
 
                 if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
-                    if (G.pieces[G.pieceEncours].getTypePiece() == 5) {
+                    if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
                         if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
                             if (G.pieces[G.pieceEncours].getCouleur() == 1) {
                                 G.Plateau.setPositionPiece(5, 0, "1");
