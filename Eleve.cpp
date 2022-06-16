@@ -1489,8 +1489,20 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
 
                     if (DeplacementPiece(G.pieces[25], V2(5, 0)) && DeplacementPiece(Piece, V2(5, 0)))
                     {
-                        
-                        return true;
+                        Piece.setCoord(V2(5, 0));
+                        G.Plateau.setPositionPiece(4, 0, "0");
+                        G.Plateau.setPositionPiece(5, 0, "1");
+                        if (DeplacementPiece(Piece, V2(6, 0)))
+                        {
+                            G.Plateau.setPositionPiece(4, 0, "1");
+                            G.Plateau.setPositionPiece(5, 0, "0");
+                            Piece.setCoord(V2(4, 0));
+                            return true;
+                        }
+                        G.Plateau.setPositionPiece(4, 0, "1");
+                        G.Plateau.setPositionPiece(5, 0, "0");
+                        Piece.setCoord(V2(4, 0));
+                        return false;
                     }
                 }
                 else if (Piece.getCouleur() == 2 && G.pieces[9].getNoMove() && G.pieces[9].getEstVivant()) {
@@ -1500,7 +1512,20 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                     if (DeplacementPiece(G.pieces[9], V2(5, 7)) && DeplacementPiece(Piece, V2(5, 7)))
                     {
                         
-                        return true;
+                        Piece.setCoord(V2(5, 7));
+                        G.Plateau.setPositionPiece(4, 7, "0");
+                        G.Plateau.setPositionPiece(5, 7, "2");
+                        if (DeplacementPiece(Piece, V2(6, 7)))
+                        {
+                            G.Plateau.setPositionPiece(4, 7, "2");
+                            G.Plateau.setPositionPiece(5, 7, "0");
+                            Piece.setCoord(V2(4, 7));
+                            return true;
+                        }
+                        G.Plateau.setPositionPiece(4, 7, "2");
+                        G.Plateau.setPositionPiece(5, 7, "0");
+                        Piece.setCoord(V2(4, 7));
+                        return false;
                     }
                 }
             }
@@ -1509,7 +1534,20 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                     if (DeplacementPiece(G.pieces[24], V2(3, 0)) && DeplacementPiece(Piece, V2(3, 0)))
                     {
                         
-                        return true;
+                        Piece.setCoord(V2(3, 0));
+                        G.Plateau.setPositionPiece(4, 0, "0");
+                        G.Plateau.setPositionPiece(3, 0, "1");
+                        if (DeplacementPiece(Piece, V2(2, 0)))
+                        {
+                            G.Plateau.setPositionPiece(4, 0, "1");
+                            G.Plateau.setPositionPiece(3, 0, "0");
+                            Piece.setCoord(V2(4, 0));
+                            return true;
+                        }
+                        G.Plateau.setPositionPiece(4, 0, "1");
+                        G.Plateau.setPositionPiece(3, 0, "0");
+                        Piece.setCoord(V2(4, 0));
+                        return false;
                     }
                 }
                 else if (Piece.getCouleur() == 2 && G.pieces[8].getNoMove() && G.pieces[8].getEstVivant()) {
@@ -1519,7 +1557,20 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                     if (DeplacementPiece(G.pieces[8], V2(3, 7)) && DeplacementPiece(Piece, V2(3, 7)))
                     {
                         
-                        return true;
+                        Piece.setCoord(V2(3, 7));
+                        G.Plateau.setPositionPiece(4, 7, "0");
+                        G.Plateau.setPositionPiece(3, 7, "2");                        
+                        if (DeplacementPiece(Piece, V2(2, 7)))
+                        {
+                            G.Plateau.setPositionPiece(4, 7, "2");
+                            G.Plateau.setPositionPiece(3, 7, "0");
+                            Piece.setCoord(V2(3, 7));
+                            return true;
+                        }
+                        G.Plateau.setPositionPiece(4, 7, "2");
+                        G.Plateau.setPositionPiece(3, 7, "0");
+                        Piece.setCoord(V2(3, 7));
+                        return false;
                     }
                 }
             }
