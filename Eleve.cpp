@@ -1433,58 +1433,8 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     {
         if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8){
             if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur()) {   
-                char pastPlateau = G.Plateau.getPositionPiece(pNewPos);
-                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
-                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
-                if (Piece.getCouleur() == 1) {
-                    for (int i = 0; i < 15; i++) {
-                        if (G.pieces[i].getEstVivant()) {
-
-                            if (DeplacementPiece(G.pieces[i], pNewPos)) {
-                                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                                return false;
-                            }
-                        }
-                    }
-                    G.pieces[15].setTypePiece(6);
-
-                    if (DeplacementPiece(G.pieces[15], pNewPos))
-                    {
-                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                        G.pieces[15].setTypePiece(5);
-                        return false;
-                    }
-                    G.pieces[15].setTypePiece(5);
-                }
-                else if (Piece.getCouleur() == 2) {
-                    for (int i = 16; i < 31; i++) {
-                        if (G.pieces[i].getEstVivant()) {
-
-                            if (DeplacementPiece(G.pieces[i], pNewPos)) {
-                                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                                return false;
-                            }
-                        }
-                    }
-                    G.pieces[31].setTypePiece(6);
-                    if (DeplacementPiece(G.pieces[31], pNewPos)) {
-                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                        G.pieces[31].setTypePiece(5);
-                        return false;
-                    }
-                    G.pieces[31].setTypePiece(5);
-
-                }
-                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 return true;
-
             }
-
         }
         else if (Piece.getNoMove())//TEst pour le roque
         {
@@ -1598,55 +1548,112 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
     V2 vCoord = Piece.getCoord();
     G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
     G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
-    if (Piece.getCouleur() == 1) {
-        for (int i = 0; i < 15; i++) {
-            if (G.pieces[i].getEstVivant()) {
+    if (Piece.getCouleur() == 1) 
+    {
+        if (!(Piece.getTypePiece()==5)) 
+        {
+            for (int i = 0; i < 15; i++) 
+            {
+                if (G.pieces[i].getEstVivant()) 
+                {
 
-                if (DeplacementPiece(G.pieces[i], G.pieces[31].getCoord())) {
-                    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                    cout << i << endl;
-                    cout << "CNONBLancbasique" << endl;
-                    return false;
+                    if (DeplacementPiece(G.pieces[i], G.pieces[31].getCoord())) 
+                    {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        cout << i << endl;
+                        cout << "CNONBLancbasique" << endl;
+                        return false;
+                    }
                 }
             }
-        }
-        G.pieces[15].setTypePiece(6);
+            G.pieces[15].setTypePiece(6);
 
-        if (DeplacementPiece(G.pieces[15], G.pieces[31].getCoord()))
-        {
-            G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-            G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+            if (DeplacementPiece(G.pieces[15], G.pieces[31].getCoord()))
+            {
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                G.pieces[15].setTypePiece(5);
+                cout << "CNONBLancroi" << endl;
+
+                return false;
+            }
             G.pieces[15].setTypePiece(5);
-            cout << "CNONBLancroi" << endl;
-
-            return false;
         }
-        G.pieces[15].setTypePiece(5);
+        else
+        {
+            for (int i = 0; i < 15; i++) {
+                if (G.pieces[i].getEstVivant()) {
+
+                    if (DeplacementPiece(G.pieces[i], pNewPos)) {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        return false;
+                    }
+                }
+            }
+            G.pieces[15].setTypePiece(6);
+
+            if (DeplacementPiece(G.pieces[15], pNewPos))
+            {
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                G.pieces[15].setTypePiece(5);
+                return false;
+            }
+            G.pieces[15].setTypePiece(5);
+        }
+        
     }
     else if (Piece.getCouleur() == 2) {
-        for (int i = 16; i < 31; i++) {
-            if (G.pieces[i].getEstVivant()) {
+        if (!(Piece.getTypePiece() == 5))
+        {
+            for (int i = 16; i < 31; i++) {
+                if (G.pieces[i].getEstVivant()) {
 
-                if (DeplacementPiece(G.pieces[i], G.pieces[15].getCoord())) {
-                    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-                    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                    cout << i << endl;
-                    cout << "CNONnoirbasique" << endl;
+                    if (DeplacementPiece(G.pieces[i], G.pieces[15].getCoord())) {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        cout << i << endl;
+                        cout << "CNONnoirbasique" << endl;
 
-                    return false;
+                        return false;
+                    }
                 }
             }
-        }
-        G.pieces[31].setTypePiece(6);
-        if (DeplacementPiece(G.pieces[31], G.pieces[15].getCoord())) {
-            G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
-            G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+            G.pieces[31].setTypePiece(6);
+            if (DeplacementPiece(G.pieces[31], G.pieces[15].getCoord())) {
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                G.pieces[31].setTypePiece(5);
+                cout << "CNONnoirroi" << endl;
+                return false;
+            }
             G.pieces[31].setTypePiece(5);
-            cout << "CNONnoirroi" << endl;
-            return false;
         }
-        G.pieces[31].setTypePiece(5);
+        else 
+        {
+            for (int i = 16; i < 31; i++) {
+                if (G.pieces[i].getEstVivant()) {
+
+                    if (DeplacementPiece(G.pieces[i], pNewPos)) {
+                        G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                        G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        return false;
+                    }
+                }
+            }
+            G.pieces[31].setTypePiece(6);
+            if (DeplacementPiece(G.pieces[31], pNewPos)) {
+                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                G.pieces[31].setTypePiece(5);
+                return false;
+            }
+            G.pieces[31].setTypePiece(5);
+        }
+
+        
 
     }
     G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
@@ -1661,7 +1668,7 @@ void setZonesJouables(_Piece pieceActuelle) {
             if (DeplacementPiece(pieceActuelle, V2(x, y)))
             {
                 cout << "cestoui" << endl;
-                if (G.pieceEncours == 31 || G.pieceEncours == 15||NoSuicideMove(pieceActuelle, V2(x, y))) 
+                if (NoSuicideMove(pieceActuelle, V2(x, y))) 
                 {
                     cout << "TjsOui" << endl;
                     G.zonesJouables.push_back(V2(x, y));
@@ -2021,7 +2028,7 @@ int gestion_ecran_jeu() {
         {
             G.setMouseIsActive(false);
             if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
-                if (G.pieceEncours== 15 || G.pieceEncours == 31 || NoSuicideMove(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
+                if (NoSuicideMove(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
                     if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
                         if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
                             if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
