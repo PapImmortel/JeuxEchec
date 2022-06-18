@@ -1432,16 +1432,16 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     if (Piece.getTypePiece() == 5)//roi
     {
         if ((pNewPos.x == vCoord.x + 1 || pNewPos.x == vCoord.x - 1 || pNewPos.x == vCoord.x) && (pNewPos.y == vCoord.y + 1 || pNewPos.y == vCoord.y - 1 || pNewPos.y == vCoord.y) && pNewPos.x >= 0 && pNewPos.x < 8 && pNewPos.y >= 0 && pNewPos.y < 8){
-            if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur()) {
+            if (G.Plateau.getPositionPiece(pNewPos) != Piece.getCouleur()) {   
                 char pastPlateau = G.Plateau.getPositionPiece(pNewPos);
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
-                if (Piece.getCouleur()==1) {
-                    for (int i = 0; i < 15;i++) {
-                        if (G.pieces[i].getCouleur() != Piece.getCouleur() && G.pieces[i].getEstVivant()) {
+                if (Piece.getCouleur() == 1) {
+                    for (int i = 0; i < 15; i++) {
+                        if (G.pieces[i].getEstVivant()) {
 
                             if (DeplacementPiece(G.pieces[i], pNewPos)) {
-                                G.Plateau.setPositionPiece(pNewPos.x,pNewPos.y,to_string(pastPlateau));
+                                G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                                 return false;
                             }
@@ -1460,7 +1460,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 }
                 else if (Piece.getCouleur() == 2) {
                     for (int i = 16; i < 31; i++) {
-                        if (G.pieces[i].getCouleur() != Piece.getCouleur() && G.pieces[i].getEstVivant()) {
+                        if (G.pieces[i].getEstVivant()) {
 
                             if (DeplacementPiece(G.pieces[i], pNewPos)) {
                                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
@@ -1474,7 +1474,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                         G.pieces[31].setTypePiece(5);
-                        return false; 
+                        return false;
                     }
                     G.pieces[31].setTypePiece(5);
 
@@ -1482,8 +1482,9 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 return true;
-                
+
             }
+
         }
         else if (Piece.getNoMove())//TEst pour le roque
         {
@@ -1592,13 +1593,79 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     }
     return false;
 }
+bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
+    char pastPlateau = G.Plateau.getPositionPiece(pNewPos);
+    V2 vCoord = Piece.getCoord();
+    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
+    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
+    if (Piece.getCouleur() == 1) {
+        for (int i = 0; i < 15; i++) {
+            if (G.pieces[i].getEstVivant()) {
+
+                if (DeplacementPiece(G.pieces[i], G.pieces[31].getCoord())) {
+                    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                    cout << i << endl;
+                    cout << "CNONBLancbasique" << endl;
+                    return false;
+                }
+            }
+        }
+        G.pieces[15].setTypePiece(6);
+
+        if (DeplacementPiece(G.pieces[15], G.pieces[31].getCoord()))
+        {
+            G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+            G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+            G.pieces[15].setTypePiece(5);
+            cout << "CNONBLancroi" << endl;
+
+            return false;
+        }
+        G.pieces[15].setTypePiece(5);
+    }
+    else if (Piece.getCouleur() == 2) {
+        for (int i = 16; i < 31; i++) {
+            if (G.pieces[i].getEstVivant()) {
+
+                if (DeplacementPiece(G.pieces[i], G.pieces[15].getCoord())) {
+                    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+                    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                    cout << i << endl;
+                    cout << "CNONnoirbasique" << endl;
+
+                    return false;
+                }
+            }
+        }
+        G.pieces[31].setTypePiece(6);
+        if (DeplacementPiece(G.pieces[31], G.pieces[15].getCoord())) {
+            G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+            G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+            G.pieces[31].setTypePiece(5);
+            cout << "CNONnoirroi" << endl;
+            return false;
+        }
+        G.pieces[31].setTypePiece(5);
+
+    }
+    G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
+    G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+    return true;
+
+}
 void setZonesJouables(_Piece pieceActuelle) {
     G.zonesJouables.clear();
     for (int x = 0; x < 8; x++) {
         for (int y = 0; y < 8; y++) {
             if (DeplacementPiece(pieceActuelle, V2(x, y)))
             {
-                G.zonesJouables.push_back(V2(x, y));
+                cout << "cestoui" << endl;
+                if (G.pieceEncours == 31 || G.pieceEncours == 15||NoSuicideMove(pieceActuelle, V2(x, y))) 
+                {
+                    cout << "TjsOui" << endl;
+                    G.zonesJouables.push_back(V2(x, y));
+                }
             }
         }
     }
@@ -1723,8 +1790,12 @@ vector<deplacement> DePossible(int joueur)
 
                     if (DeplacementPiece(vPiece, V2(k, j)))
                     {
-                        DP.push_back(deplacement(vPiece.pos, V2(k, j)));
-                        std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        if (NoSuicideMove(vPiece, V2(k, j))) 
+                        {
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j)));
+                            std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        }
+                       
                     }
 
                 }
@@ -1744,8 +1815,12 @@ vector<deplacement> DePossible(int joueur)
 
                     if (DeplacementPiece(vPiece, V2(k, j)))
                     {
-                        DP.push_back(deplacement(vPiece.pos, V2(k, j)));
-                        std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        if (NoSuicideMove(vPiece, V2(k, j)))
+                        {
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j)));
+                            std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        }
+                        
                     }
                 }
             }
@@ -1946,62 +2021,60 @@ int gestion_ecran_jeu() {
         {
             G.setMouseIsActive(false);
             if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
-
-                if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
-                    if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
-                        if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
-                            if (G.pieces[G.pieceEncours].getCouleur() == 1) {
-                                G.Plateau.setPositionPiece(5, 0, "1");
-                                G.Plateau.setPositionPiece(7, 0, "0");
-                                G.pieces[25].setCoord(V2(5, 0));
+                if (G.pieceEncours== 15 || G.pieceEncours == 31 || NoSuicideMove(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
+                    if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
+                        if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
+                            if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
+                                if (G.pieces[G.pieceEncours].getCouleur() == 1) {
+                                    G.Plateau.setPositionPiece(5, 0, "1");
+                                    G.Plateau.setPositionPiece(7, 0, "0");
+                                    G.pieces[25].setCoord(V2(5, 0));
+                                }
+                                else {
+                                    G.Plateau.setPositionPiece(5, 7, "2");
+                                    G.Plateau.setPositionPiece(7, 7, "0");
+                                    G.pieces[9].setCoord(V2(5, 7));
+                                }
                             }
-                            else{
-                                G.Plateau.setPositionPiece(5, 7, "2");
-                                G.Plateau.setPositionPiece(7, 7, "0");
-                                G.pieces[9].setCoord(V2(5, 7));
+                            else if ((G.pieces[G.pieceEncours].getCoord().x - 2 == (int)(G.xMouse / 80))) {
+                                if (G.pieces[G.pieceEncours].getCouleur() == 1) {
+                                    G.Plateau.setPositionPiece(3, 0, "1");
+                                    G.Plateau.setPositionPiece(0, 0, "0");
+                                    G.pieces[24].setCoord(V2(3, 0));
+                                }
+                                else {
+                                    G.Plateau.setPositionPiece(3, 7, "2");
+                                    G.Plateau.setPositionPiece(0, 7, "0");
+                                    G.pieces[8].setCoord(V2(3, 7));
+                                }
                             }
                         }
-                        else if ((G.pieces[G.pieceEncours].getCoord().x - 2 == (int)(G.xMouse / 80))) {
-                            if (G.pieces[G.pieceEncours].getCouleur() == 1) {
-                                G.Plateau.setPositionPiece(3, 0, "1");
-                                G.Plateau.setPositionPiece(0, 0, "0");
-                                G.pieces[24].setCoord(V2(3, 0));
-                            }
-                            else {
-                                G.Plateau.setPositionPiece(3, 7, "2");
-                                G.Plateau.setPositionPiece(0, 7, "0");
-                                G.pieces[8].setCoord(V2(3, 7));
-                            }
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                        if (G.pieces[G.pieceEncours].getNoMove()) {
+                            G.pieces[G.pieceEncours].setNoMove(false);
                         }
                     }
-                    G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
-                    G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                    G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-                    if (G.pieces[G.pieceEncours].getNoMove()) {
-                        G.pieces[G.pieceEncours].setNoMove(false);
-                    }
-                }
-                else if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
-                    for (_Piece& piece : G.pieces) {
-                        if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
-                            piece.setEstVivant();
+                    else if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
+                        for (_Piece& piece : G.pieces) {
+                            if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
+                                piece.setEstVivant();
+                            }
+                        }
+                        G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
+                        G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
+                        G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
+                        if (G.pieces[G.pieceEncours].getNoMove()) {
+                            G.pieces[G.pieceEncours].setNoMove(false);
                         }
                     }
-                    G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
-                    G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
-                    G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
-                    if (G.pieces[G.pieceEncours].getNoMove()) {
-                        G.pieces[G.pieceEncours].setNoMove(false);
-                        cout << G.pieces[G.pieceEncours].getCoord() << endl;
-
+                    if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
+                        G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
                     }
-                }
-                if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
-                    G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
-                }
-                
 
-                G.setJoueur();
+                    G.setJoueur();
+                }              
             }
             G.pieceEncours = -1;
         }
