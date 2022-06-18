@@ -91,7 +91,7 @@ struct _Piece {
     void setNoMove(bool _noMove) { noMove = _noMove; }
     int getNoMove() { return noMove; }
     void setTypePiece(int _typePiece) { typePiece = _typePiece; }
-    void setEstVivant() { estVivant = false; }
+    void setEstVivant(bool _estVivant) { estVivant = _estVivant; }
     bool getEstVivant() { return estVivant; }
     void setCoord(V2 Coord) { pos = Coord; }
     V2 getCoord() { return pos; }
@@ -1546,6 +1546,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
 bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
     char pastPlateau = G.Plateau.getPositionPiece(pNewPos);
     V2 vCoord = Piece.getCoord();
+    int leMort = -1; // la piece qui meurt si on joue notre coup
     G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(Piece.getCouleur()));
     G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(0));
     if (Piece.getCouleur() == 1) 
@@ -1554,18 +1555,31 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
         {
             for (int i = 0; i < 15; i++) 
             {
-                if (G.pieces[i].getEstVivant()) 
+                if (G.pieces[i].getCoord() == pNewPos && G.pieces[i].getEstVivant())
                 {
-
+                    leMort = i;
+                    G.pieces[i].setEstVivant(false);
+                }
+                else if (G.pieces[i].getEstVivant()) 
+                {
+                    
                     if (DeplacementPiece(G.pieces[i], G.pieces[31].getCoord())) 
                     {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                        cout << i << endl;
-                        cout << "CNONBLancbasique" << endl;
+                        if (leMort != -1)
+                        {
+                            G.pieces[leMort].setEstVivant(true);
+
+                        }
                         return false;
                     }
                 }
+            }
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
             }
             G.pieces[15].setTypePiece(6);
 
@@ -1574,8 +1588,6 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[15].setTypePiece(5);
-                cout << "CNONBLancroi" << endl;
-
                 return false;
             }
             G.pieces[15].setTypePiece(5);
@@ -1609,24 +1621,35 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
         if (!(Piece.getTypePiece() == 5))
         {
             for (int i = 16; i < 31; i++) {
-                if (G.pieces[i].getEstVivant()) {
+                if (G.pieces[i].getCoord() == pNewPos && G.pieces[i].getEstVivant())
+                {
+                    leMort = i;
+                    G.pieces[i].setEstVivant(false);
+                }
+                else if (G.pieces[i].getEstVivant()) {
 
                     if (DeplacementPiece(G.pieces[i], G.pieces[15].getCoord())) {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
-                        cout << i << endl;
-                        cout << "CNONnoirbasique" << endl;
+                        if (leMort != -1)
+                        {
+                            G.pieces[leMort].setEstVivant(true);
 
+                        }
                         return false;
                     }
                 }
+            }
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
             }
             G.pieces[31].setTypePiece(6);
             if (DeplacementPiece(G.pieces[31], G.pieces[15].getCoord())) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[31].setTypePiece(5);
-                cout << "CNONnoirroi" << endl;
                 return false;
             }
             G.pieces[31].setTypePiece(5);
@@ -1667,10 +1690,8 @@ void setZonesJouables(_Piece pieceActuelle) {
         for (int y = 0; y < 8; y++) {
             if (DeplacementPiece(pieceActuelle, V2(x, y)))
             {
-                cout << "cestoui" << endl;
                 if (NoSuicideMove(pieceActuelle, V2(x, y))) 
                 {
-                    cout << "TjsOui" << endl;
                     G.zonesJouables.push_back(V2(x, y));
                 }
             }
@@ -2066,7 +2087,7 @@ int gestion_ecran_jeu() {
                     else if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
                         for (_Piece& piece : G.pieces) {
                             if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
-                                piece.setEstVivant();
+                                piece.setEstVivant(false);
                             }
                         }
                         G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
