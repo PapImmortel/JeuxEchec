@@ -1769,10 +1769,10 @@ void Timer(_Piece* piece, int multiplier)
     piece->TimeDead = t;
 }
 
-deplacement changePos(_Piece piece, V2 pos)
+deplacement changePos(_Piece* piece, V2 pos)
 {
-    G.Plateau.setPositionPiece(piece.getCoord().x, piece.getCoord().y, "0");
-    deplacement D = deplacement(piece.getCoord(), pos, 0, G.Plateau.getPositionPiece(pos));
+    G.Plateau.setPositionPiece(piece->getCoord().x, piece->getCoord().y, "0");
+    deplacement D = deplacement(piece->getCoord(), pos, 0, G.Plateau.getPositionPiece(pos));
 
     for (_Piece& P : G.pieces)
     {
@@ -1789,8 +1789,8 @@ deplacement changePos(_Piece piece, V2 pos)
 
     }
 
-    piece.pos = pos;
-    G.Plateau.setPositionPiece(piece.getCoord().x, piece.getCoord().y, std::to_string(piece.getCouleur()));
+    piece->pos = pos;
+    G.Plateau.setPositionPiece(piece->getCoord().x, piece->getCoord().y, std::to_string(piece->getCouleur()));
     return D;
 }
 void changeBack(deplacement D)
@@ -1965,7 +1965,7 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
         int size = DP.size();
         for (int i = 0; i < size; i++)
         {
-            deplacement y = changePos(G.pieces[DP[i].indexP], DP[i].Fin);
+            deplacement y = changePos(&G.pieces[DP[i].indexP], DP[i].Fin);
             v = min(v, IaN(alpha, beta, false, true, depth - 1));
             if (alpha > v)
             {
@@ -1993,7 +1993,7 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
                // std::cout << i;
             }*/
             coup = DP[0];
-            deplacement x = changePos(G.pieces[DP[i].indexP], DP[i].Fin);
+            deplacement x = changePos(&G.pieces[DP[i].indexP], DP[i].Fin);
             int m = v;
             v = max(v, IaN(alpha, beta, true, true, depth - 1));
             if (v != m)
@@ -2019,7 +2019,7 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
     }
     else
     {
-        changePos(G.pieces[coup.indexP], coup.Fin);
+        changePos(&G.pieces[coup.indexP], coup.Fin);
         actualisePlateau();
         fin();
         return v;
