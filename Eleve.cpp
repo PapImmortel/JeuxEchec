@@ -1759,15 +1759,8 @@ void Timer(_Piece* piece, int multiplier)
     int t = piece->TimeDead + 1 * multiplier;
     piece->TimeDead = t;
 }
-void changeVie(_Piece* piece)
-{
-    if (piece->estVivant)
-    {
-        piece->estVivant = false;
-    }
-    else { piece->estVivant = true; }
-}
-/*new*/deplacement changePos(_Piece* piece, V2 pos)
+
+deplacement changePos(_Piece* piece, V2 pos)
 {
     G.Plateau.setPositionPiece(piece->pos.x, piece->pos.y, "0");
     deplacement D = deplacement(piece->pos, pos, 0, G.Plateau.getPositionPiece(pos));
@@ -1780,7 +1773,7 @@ void changeVie(_Piece* piece)
         }
         if (P.pos == pos && P.estVivant)
         {
-            changeVie(&P);
+            P.setEstVivant(!P.getEstVivant());
             P.TimeDead = 0;
             G.Plateau.setPositionPiece(P.pos.x, P.pos.y, "0");
         }
@@ -1815,7 +1808,7 @@ void changeBack(deplacement D)
         {
             if (piece.TimeDead == 0)
             {
-                changeVie(&piece);
+                piece.setEstVivant(!piece.getEstVivant());
                 piece.TimeDead = -1;
                 G.Plateau.setPositionPiece(piece.pos.x, piece.pos.y, to_string(piece.couleur));
 
