@@ -80,7 +80,7 @@ struct _Piece {
     int IdTex;
     string Texture;
     bool noMove;
-    int TimeDead = 0;
+    int TimeDead = -1   ;
 
     _Piece(V2 _Pos, int _couleur) {
         pos = _Pos;
@@ -1154,12 +1154,28 @@ struct Dessin {
 struct deplacement {
     V2 start;
     V2 Fin;
+    int indexP;
+    int couleur;
     deplacement(V2 pS, V2 pF)
     {
         start = pS;
         Fin = pF;
+
     }
-}; 
+    deplacement(V2 pS, V2 pF, int pP)
+    {
+        start = pS;
+        Fin = pF;
+        indexP = pP;
+    }
+    deplacement(V2 pS, V2 pF, int pP, int pcouleur)
+    {
+        start = pS;
+        Fin = pF;
+
+        couleur = pcouleur;
+    }
+};
 struct GameData {
 
     int ecran = 0;
@@ -1235,7 +1251,7 @@ struct GameData {
 };
 GameData G;
 
-
+   
 
 bool DeplacementPiece(_Piece Piece, V2 pNewPos){
     //0 = pion, 1 = tour, 2 = cavalier, 3 = fou, 4 =dame , 5 = roi, 6 = roi pour test
@@ -1737,93 +1753,153 @@ int point()
     }
     return point;
 }
-deplacement changePos(_Piece* piece, V2 pos)
+//IA
+void Timer(_Piece* piece, int multiplier)
 {
-    deplacement D = deplacement(piece->pos, pos);
-    piece->pos = pos;
+    int t = piece->TimeDead + 1 * multiplier;
+    piece->TimeDead = t;
+}
+void changeVie(_Piece* piece)
+{
+    if (piece->estVivant)
+    {
+        piece->estVivant = false;
+    }
+    else { piece->estVivant = true; }
+}
+/*new*/deplacement changePos(_Piece* piece, V2 pos)
+{
+    G.Plateau.setPositionPiece(piece->pos.x, piece->pos.y, "0");
+    deplacement D = deplacement(piece->pos, pos, 0, G.Plateau.getPositionPiece(pos));
+
     for (_Piece& P : G.pieces)
     {
         if (!P.estVivant)
         {
-            P.TimeDead += 1;
+            Timer(&P, 1);
         }
         if (P.pos == pos && P.estVivant)
         {
-            P.estVivant = false;
+            changeVie(&P);
+            P.TimeDead = 0;
+            G.Plateau.setPositionPiece(P.pos.x, P.pos.y, "0");
         }
+
     }
+
+    piece->pos = pos;
+    G.Plateau.setPositionPiece(piece->pos.x, piece->pos.y, std::to_string(piece->couleur));
     return D;
 }
 void changeBack(deplacement D)
 {
-    for (int i = 0; i < 32; i++)
+    for (_Piece& piece : G.pieces)
     {
 
-        std::cout << "(" << G.pieces[i].pos.x << G.pieces[i].pos.y << ";" << D.start.x << D.start.y << ")" << endl;
-        if (G.pieces[i].pos == D.Fin)
+
+        if (piece.pos == D.Fin)
         {
-            if (G.pieces[i].estVivant)
+            if (piece.estVivant)
             {
-                changePos(&G.pieces[i], D.start);
+                if (G.Plateau.getPositionPiece(piece.pos))
+                {
+                    G.Plateau.setPositionPiece(piece.pos.x, piece.pos.y, to_string(D.couleur));
+                }
+                piece.pos = D.start;
+                G.Plateau.setPositionPiece(piece.pos.x, piece.pos.y, to_string(piece.getCouleur()));
 
             }
-            else if (!G.pieces[i].estVivant && G.pieces[i].TimeDead == 0)
+
+        }
+        if (!piece.estVivant)
+        {
+            if (piece.TimeDead == 0)
             {
-                G.pieces[i].estVivant = true;
+                changeVie(&piece);
+                piece.TimeDead = -1;
+                G.Plateau.setPositionPiece(piece.pos.x, piece.pos.y, to_string(piece.couleur));
+
+            }
+            else
+            {
+                Timer(&piece, -1);
             }
         }
-
+        /* if (!G.pieces[17].getEstVivant())
+         {
+             cout << G.Plateau.getPlateau() << endl;
+         }*/
     }
 }
-void coup()
+void fin()
 {
-    vector < deplacement > CP;
-    G.test = changePos(&G.pieces[14], V2(5, 3));
-    std::cout << "(" << G.test.start.x << G.test.start.y << ";" << G.test.Fin.x << G.test.Fin.y << ")" << endl;
-
     for (int i = 0; i < 32; i++)
     {
-
-        std::cout << "(" << G.pieces[i].pos.x << G.pieces[i].pos.y << ";" << G.test.start.x << G.test.start.y << ")" << endl;
-        if (G.pieces[i].pos == G.test.Fin)
+        if (!G.pieces[i].getEstVivant())
         {
-            if (G.pieces[i].estVivant)
+            G.pieces[i].TimeDead = 100;
+        }
+    }
+}
+void actualisePlateau()
+{
+    for (int i = 0; i < 32; i++)
+    {
+        if (G.pieces[i].getEstVivant())
+        {
+            if (G.pieces[i].couleur == 1)
+                G.Plateau.setPositionPiece(G.pieces[i].pos.x, G.pieces[i].pos.y, "3");
+            else
+                G.Plateau.setPositionPiece(G.pieces[i].pos.x, G.pieces[i].pos.y, "4");
+        }
+    }
+    for (int x = 0; x < 8; x++)
+    {
+        for (int y = 0; y < 8; y++)
+        {
+            //cout << G.Plateau.getPositionPiece(V2(x, y)) << endl;
+            if (G.Plateau.getPositionPiece(V2(x, y)) == 3)
             {
-                changePos(&G.pieces[i], G.test.start);
-
+                G.Plateau.setPositionPiece(x, y, "1");
             }
-            else if (!G.pieces[i].estVivant && G.pieces[i].TimeDead == 0)
+            else if (G.Plateau.getPositionPiece(V2(x, y)) == 4)
             {
-                G.pieces[i].estVivant = true;
+                G.Plateau.setPositionPiece(x, y, "2");
+            }
+            else
+            {
+                G.Plateau.setPositionPiece(x, y, "0");
             }
         }
 
     }
-    int p = point();
-    std::cout << p << endl;
-
+    //cout << G.Plateau.getPlateau() << endl;
 }
 vector<deplacement> DePossible(int joueur)
 {
     vector < deplacement > DP = {};
     if (joueur == 1)
     {
-        for (int i = 15; i < 32; i++)
+        for (int i = 16; i < 32; i++)
         {
             _Piece vPiece = G.pieces[i];
             for (int k = 0; k < 8; k++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-
-                    if (DeplacementPiece(vPiece, V2(k, j)))
+                    if (i == 31 && (abs(vPiece.pos.x - k) < 2))
                     {
-                        if (NoSuicideMove(vPiece, V2(k, j))) 
+                        if (DeplacementPiece(vPiece, V2(k, j)))
                         {
-                            DP.push_back(deplacement(vPiece.pos, V2(k, j)));
-                            std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                            // std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
                         }
-                       
+                    }
+                    else if (i != 31 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.estVivant)
+                    {
+
+                        DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                        //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
                     }
 
                 }
@@ -1833,22 +1909,26 @@ vector<deplacement> DePossible(int joueur)
     }
     else
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 16; i++)
         {
             _Piece vPiece = G.pieces[i];
             for (int k = 0; k < 8; k++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-
-                    if (DeplacementPiece(vPiece, V2(k, j)))
+                    if (i == 15 && (abs(vPiece.pos.x - k) < 2))
                     {
-                        if (NoSuicideMove(vPiece, V2(k, j)))
+                        if (DeplacementPiece(vPiece, V2(k, j)))
                         {
-                            DP.push_back(deplacement(vPiece.pos, V2(k, j)));
-                            std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                            //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                            int p = 0;
                         }
-                        
+                    }
+                    else if (i != 15 && DeplacementPiece(vPiece, V2(k, j)))
+                    {
+                        DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                        //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
                     }
                 }
             }
@@ -1856,6 +1936,87 @@ vector<deplacement> DePossible(int joueur)
         return DP;
     }
 }
+int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
+{
+    int v;
+    deplacement coup = deplacement(V2(9, 9), V2(9, 9));
+    if (depth == 0)
+    {
+
+        return point();
+    }
+    if (abs(point() > 500))
+    {
+        return point();
+    }
+    else if (EMin)
+    {
+        v = 2000;
+        vector<deplacement> DP = DePossible(1);
+        int size = DP.size();
+        for (int i = 0; i < size; i++)
+        {
+            deplacement y = changePos(&G.pieces[DP[i].indexP], DP[i].Fin);
+            v = min(v, IaN(alpha, beta, false, true, depth - 1));
+            if (alpha > v)
+            {
+                if (fils)
+                {
+                    changeBack(y);
+                    actualisePlateau();
+                    return v;
+                }
+            }
+            beta = min(beta, v);
+            changeBack(y);
+            actualisePlateau();
+        }
+    }
+    else
+    {
+        v = -2000;
+        vector<deplacement> DP = DePossible(2);
+        int size = DP.size();
+        for (int i = 0; i < size; i++)
+        {
+            /*if (!fils)
+            {
+               // std::cout << i;
+            }*/
+            coup = DP[0];
+            deplacement x = changePos(&G.pieces[DP[i].indexP], DP[i].Fin);
+            int m = v;
+            v = max(v, IaN(alpha, beta, true, true, depth - 1));
+            if (v != m)
+                coup = DP[i];
+            if (beta < v)
+            {
+
+                if (fils)
+                {
+                    changeBack(x);
+                    actualisePlateau();
+                    return v;
+                }
+            }
+            alpha = max(beta, v);
+            changeBack(x);
+            actualisePlateau();
+        }
+    }
+    if (fils)
+    {
+        return v;
+    }
+    else
+    {
+        changePos(&G.pieces[coup.indexP], coup.Fin);
+        actualisePlateau();
+        fin();
+        return v;
+    }
+}
+
 void affichage_ecran_accueil() {
     G2D::DrawStringFontMono(V2(50, 400), "Jeux d'echec",
         20, 4, Color::White);
