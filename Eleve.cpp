@@ -2197,7 +2197,7 @@ int gestion_ecran_jeu() {
             G2D::GetMousePos(&G.xMouse, &G.yMouse);
             if (!G.mouseIsActive)
             {
-                if (G.getJoueur())
+                if (G.getJoueur()==1)
                 {
                     for (int i = 16; i < 32; i++) {
                         if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))
@@ -2209,7 +2209,7 @@ int gestion_ecran_jeu() {
                         }
                     }
                 }
-                else
+                else if(G.getJoueur() == 2)
                 {
                     for (int i = 0; i < 16; i++) {
                         if (G.pieces[i].getEstVivant() && G.pieces[i].getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))
