@@ -14,8 +14,10 @@ using namespace std;
 #define ECRAN_OPTIONS 1
 #define INIT_PARTIE 2
 #define ECRAN_JEU 3
-#define ECRAN_GAME_OVER 4
-#define ECRAN_WIN 5
+#define ECRAN_Victoire_Blanc 4
+#define ECRAN_Victoire_Noir 5
+#define ECRAN_Pat 6
+
 
 struct _plateau {
     string Map1 ="M M M M "
@@ -2025,7 +2027,24 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
         return v;
     }
 }
-
+int finDePartie() {
+    if (DePossible(G.getJoueur()).empty()) {
+        if (G.getJoueur() == 1) {
+            for (int i = 0; i < 15; i++) {
+                if (DeplacementPiece(G.pieces[i], G.pieces[31].getCoord()))
+                    return 2;
+            }
+        }
+        else if (G.getJoueur() == 2) {
+            for (int i = 16; i < 31; i++) {
+                if (DeplacementPiece(G.pieces[i], G.pieces[15].getCoord()))
+                    return 1;
+            }
+        }
+        return 0;
+    }
+    return -1;
+}
 void affichage_ecran_accueil() {
     G2D::DrawStringFontMono(V2(50, 400), "Jeux d'echec",
         20, 4, Color::White);
@@ -2103,16 +2122,22 @@ void affichage_ecran_jeu() {
 
 }
 //end
-void affichage_ecran_game_over() {
-    G2D::DrawStringFontMono(V2(70, 500), "Game over", 80, 10, Color::Red);
+void affichage_ecran_victoire_blanc() {
+    G2D::DrawStringFontMono(V2(70, 500), "VIctoireBLanc", 80, 10, Color::Red);
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur ENTER pour faire une autre partie.", 16,
         3, Color::Green);
 }
 //end
 
-void affichage_ecran_win() {
-    G2D::DrawStringFontMono(V2(70, 500), "You WIN !!!!", 80, 10, Color::Green);
+void affichage_ecran_victoire_noir() {
+    G2D::DrawStringFontMono(V2(70, 500), "Victoire Noir", 80, 10, Color::Green);
+    G2D::DrawStringFontMono(V2(50, 200),
+        "Appuyez sur ENTER pour faire une autre partie.", 16,
+        3, Color::White);
+}
+void affichage_ecran_pat() {
+    G2D::DrawStringFontMono(V2(70, 500), "PAT", 80, 10, Color::Green);
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur ENTER pour faire une autre partie.", 16,
         3, Color::White);
@@ -2132,11 +2157,14 @@ void render() {
     if (G.ecran == ECRAN_JEU) {
         affichage_ecran_jeu();
     }
-    if (G.ecran == ECRAN_GAME_OVER) {
-        affichage_ecran_game_over();
+    if (G.ecran == ECRAN_Victoire_Blanc) {
+        affichage_ecran_victoire_blanc();
     }
-    if (G.ecran == ECRAN_WIN) {
-        affichage_ecran_win();
+    if (G.ecran == ECRAN_Victoire_Noir) {
+        affichage_ecran_victoire_noir();
+    }
+    if (G.ecran == ECRAN_Pat) {
+        affichage_ecran_pat();
     }
     G2D::Show();
 }
@@ -2288,24 +2316,39 @@ int gestion_ecran_jeu() {
             }
         }
     }
-       
+    int finpartie = finDePartie();
+    if (finpartie != -1) {
+        if (finpartie == 1) {
+            return 4;
+        }
+        else if (finpartie == 2) {
+            return 5;
+        }
+        else {
+            return 6;
+        }
+    }
     return 3;
 }
 //end
-int gestion_ecran_game_over() {
+int gestion_ecran_victoire_blanc() {
     if (G2D::IsKeyPressed(Key::ENTER)) {
         return 1;
     }
     return 4;
 }
-//end
-int gestion_ecran_win() {
+int gestion_ecran_victoire_noir() {
     if (G2D::IsKeyPressed(Key::ENTER)) {
         return 1;
     }
     return 5;
 }
-//end
+int gestion_ecran_pat() {
+    if (G2D::IsKeyPressed(Key::ENTER)) {
+        return 1;
+    }
+    return 6;
+}
 void Logic() {
     if (G.ecran == ECRAN_ACCUEIL) {
         G.ecran = gestion_ecran_accueil();
@@ -2321,11 +2364,14 @@ void Logic() {
         G.ecran = gestion_ecran_jeu();
     }
 
-    if (G.ecran == ECRAN_GAME_OVER) {
-        G.ecran = gestion_ecran_game_over();
+    if (G.ecran == ECRAN_Victoire_Blanc) {
+        G.ecran = gestion_ecran_victoire_blanc();
     }
-    if (G.ecran == ECRAN_WIN) {
-        G.ecran = gestion_ecran_win();
+    if (G.ecran == ECRAN_Victoire_Noir) {
+        G.ecran = gestion_ecran_victoire_noir();
+    }
+    if (G.ecran == ECRAN_Pat) {
+        G.ecran = gestion_ecran_pat();
     }
 }
 
