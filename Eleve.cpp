@@ -82,7 +82,7 @@ struct _Piece {
     int IdTex;
     string Texture;
     bool noMove;
-    int TimeDead = 100   ;
+    int TimeDead = -1   ;
 
     _Piece(V2 _Pos, int _couleur) {
         pos = _Pos;
@@ -1338,7 +1338,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
                 return true;
             }
         }
-        else if (Piece.getNoMove())//TEst pour le roque
+        /*else if (Piece.getNoMove())//TEst pour le roque
         {
             if ((vCoord.y == pNewPos.y && vCoord.x + 2 == pNewPos.x)) {
                 if (Piece.getCouleur() == 1 && G.pieces[25].getNoMove() && G.pieces[25].getEstVivant()) {
@@ -1434,7 +1434,7 @@ bool DeplacementPiece(_Piece Piece, V2 pNewPos){
             }
             
         }
-
+        */
         return false;
     }
     if (Piece.getTypePiece() == 6) {
@@ -1702,8 +1702,8 @@ int point()
 //IA
 void Timer(_Piece* piece, int multiplier)
 {
-    int t = piece->TimeDead + 1 * multiplier;
-    piece->TimeDead = t;
+    
+    piece->TimeDead += multiplier;
 }
 
 deplacement changePos(int index, V2 pos)
@@ -1713,11 +1713,11 @@ deplacement changePos(int index, V2 pos)
 
     for (_Piece& P : G.pieces)
     {
-        if (!P.estVivant)
+        if (!P.getEstVivant() && P.TimeDead >-1)
         {
             Timer(&P, 1);
         }
-        if (P.pos == pos && P.estVivant)
+        if (P.pos == pos && P.getEstVivant())
         {
             P.setEstVivant(!P.getEstVivant());
             P.TimeDead = 0;
@@ -1750,7 +1750,7 @@ void changeBack(deplacement D)
             }
 
         }
-        if (!piece.estVivant)
+        if (!piece.getEstVivant())
         {
             if (piece.TimeDead == 0)
             {
@@ -1759,7 +1759,7 @@ void changeBack(deplacement D)
                 G.Plateau.setPositionPiece(piece.pos.x, piece.pos.y, to_string(piece.couleur));
 
             }
-            else
+            else if(piece.TimeDead >0)
             {
                 Timer(&piece, -1);
             }
@@ -1776,7 +1776,7 @@ void fin()
     {
         if (!G.pieces[i].getEstVivant())
         {
-            G.pieces[i].TimeDead = 100;
+            G.pieces[i].TimeDead = -1;
         }
     }
 }
@@ -2184,7 +2184,7 @@ int gestion_ecran_jeu() {
     if (G.getJoueur()==G.joueurIa)
     {
        actualisePlateau();
-       IaN(-2000, 2000, false, false, 2);
+       IaN(-2000, 2000, false, false, 3);
        G.setJoueur();
     }
     else
@@ -2228,7 +2228,7 @@ int gestion_ecran_jeu() {
                 if (DeplacementPiece(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
                     if (NoSuicideMove(G.pieces[G.pieceEncours], V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)))) {
                         if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) == 0) {
-                            if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
+                            /*if (G.pieces[G.pieceEncours].getTypePiece() == 5) {//verification si roque
                                 if ((G.pieces[G.pieceEncours].getCoord().x + 2 == (int)(G.xMouse / 80))) {
                                     if (G.pieces[G.pieceEncours].getCouleur() == 1) {
                                         G.Plateau.setPositionPiece(5, 0, "1");
@@ -2254,6 +2254,7 @@ int gestion_ecran_jeu() {
                                     }
                                 }
                             }
+                            */
                             G.Plateau.setPositionPiece((int)(G.xMouse / 80), (int)(G.yMouse / 80), to_string(G.pieces[G.pieceEncours].getCouleur()));
                             G.Plateau.setPositionPiece(G.pieces[G.pieceEncours].getCoord().x, G.pieces[G.pieceEncours].getCoord().y, "0");
                             G.pieces[G.pieceEncours].setCoord(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)));
