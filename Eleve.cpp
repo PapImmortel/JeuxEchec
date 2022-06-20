@@ -82,7 +82,7 @@ struct _Piece {
     int IdTex;
     string Texture;
     bool noMove;
-    int TimeDead = -1   ;
+    int TimeDead = 100   ;
 
     _Piece(V2 _Pos, int _couleur) {
         pos = _Pos;
@@ -833,324 +833,202 @@ struct _Pion : public _Piece {
             setTexture(pionNoir);
     }
 };
-struct Dessin {
-    string roiNoir =
-        "[  K  KKKKKKK  K  ]"
-        "[ KOKKRORRRORKKOK ]"
-        "[ KOOROOOROOOROOK ]"
-        "[ KOOOOOOOOOOOOOK ]"
-        "[ KWAWAAWAWAAWAWK ]"
-        "[ KOOOOOOOOOOOOOK ]"
-        "[ KJTWRTTTTTRWTJK ]"
-        "[ KJTWKTTTTTKWTJK ]"
-        "[KJTTWWTTTTTWWTTJK]"
-        "[KJTTTTJJJJJTTTTJK]"
-        "[KJJJTJTTTTTJTJJJK]"
-        "[ KJJTJTTJTTJTJJK ]"
-        "[  KJJJJJJJJJJJK  ]"
-        "[  KKJJJJJJJJJSK  ]"
-        "[ Y KSSSSCSSSSKK  ]"
-        "[YAY KKKSCSKKKWK  ]"
-        "[ YKPWWWSCSWWWPK  ]"
-        "[ GKPPPWSCSWPPPK  ]"
-        "[ YPPPPWBCBWPPPK  ]"
-        "[ G KPPWMMMWPPKK  ]"
-        "[ G KPPWBCBWPPTK  ]"
-        "[ G KPPWBCBWPPK   ]"
-        "[ G KPPWBCBWPPK   ]"
-        "[ G KPPWBCBWPPK   ]"
-        "[ G KKKWBCBWKKK   ]"
-        "[      KKKKK      ]";
+struct _Titre
+{
+    string titre =
+        "[                                                                                         ]"
+        "[   3OOOOOOOOOO    3OOOOO    3OOOOO    3OOOOOOOOOOOOOO   3OOOOOOOOOOO    3OOOOOOOOOOO     ]"
+        "[  3OOOOOOOOOOO    3OOOOO    3OOOOO    3OOOOOOOOOOOOOO   3OOOOOOOOOOO    3OOOOOOOOOOO     ]"
+        "[ 3OOOOOOO33333    3OOOOO    3OOOOO    3OOOOOOO          3OOOOO          3OOOOO           ]"
+        "[ 3OOOOOOO         3OOOOO33333OOOOO    3OOOOOOO          3OOOOO          3OOOOO           ]"
+        "[ 3OOOOOOO         3OOOOOOOOOOOOOOO    3OOOOOOOOOOOO     3OOOOOOOOOOO    3OOOOOOOOOOO     ]"
+        "[ 3OOOOOOO         3OOOOOOOOOOOOOOO    3OOOOOOOOOOOO     3OOOOOOOOOOO    3OOOOOOOOOOO     ]"
+        "[ 3OOOOOOO         3OOOOO    3OOOOO    3OOOOOOO                 OOOOO           OOOOO     ]"
+        "[ 3OOOOOOO33333    3OOOOO    3OOOOO    3OOOOOOO          3333333OOOOO    3333333OOOOO     ]"
+        "[  3OOOOOOOOOOO    3OOOOO    3OOOOO    3OOOOOOOOOOOOOO   3OOOOOOOOOOO    3OOOOOOOOOOO     ]"
+        "[   33OOOOOOOOO    3OOOOO    3OOOOO    3OOOOOOOOOOOOOO   3OOOOOOOOOOO    3OOOOOOOOOOO     ]";
 
-    string roiBlanc = "[  K  KKKKKKK  K  ]"
-        "[ KYKKRYRRRYRKKYK ]"
-        "[ KYYRYYYRYYYRYYK ]"
-        "[ KYYYYYYYYYYYYYK ]"
-        "[ KWAWAAWAWAAWAWK ]"
-        "[ KYYYYYYYYYYYYYK ]"
-        "[ KGTWDTTTTTDWTGK ]"
-        "[ KGTWDTTTTTDWTGK ]"
-        "[KGTTWWTTTTTWWTTGK]"
-        "[KGTTTTGGGGGTTTTGK]"
-        "[KGGGTGTTTTTGTGGGK]"
-        "[ KGGTGTTGTTGTGGK ]"
-        "[  KGGGGGGGGGGGK  ]"
-        "[  KKGGGGGGGGGSK  ]"
-        "[ Y KSSSSCSSSSKK  ]"
-        "[YAY KKKSCSKKKWK  ]"
-        "[ YKRWWWSCSWWWRK  ]"
-        "[ GKRRRWSCSWRRRK  ]"
-        "[ YRRRRWBCBWRRRK  ]"
-        "[ G KRRWMMMWRRKK  ]"
-        "[ G KRRWBCBWRRTK  ]"
-        "[ G KRRWBCBWRRK   ]"
-        "[ G KRRWBCBWRRK   ]"
-        "[ G KRRWBCBWRRK   ]"
-        "[ G KKKWBCBWKKK   ]"
-        "[      KKKKK      ]";
+    string BG =
+        "[QQQQQ]"
+        "[QQQQQ]"
+        "[QQQQQ]";
 
-    string reineBlanche =
-        "[            U            ]"
-        "[           UVU           ]"
-        "[           UVU           ]"
-        "[        YOUUUUUOY        ]"
-        "[       OUUUUUUUUYO       ]"
-        "[      OYOOOYYYYOYO       ]"
-        "[      OYYOOOOYOOYYO      ]"
-        "[      OYOTTTOOTTOYO      ]"
-        "[     OYOTTTTTTTTTOYO     ]"
-        "[     OYYTBWTTTWBWYYO     ]"
-        "[     OYYTBBTTTBBWYYO     ]"
-        "[      OYHHTTTTTHHYO      ]"
-        "[     OYYOTTTTTTTOYYO     ]"
-        "[    OYYYYOTTRRTOYYYYO    ]"
-        "[   OYOWOOOOTTTOOOOWOYO   ]"
-        "[   OYOWWWTTTTTTTWWWOYO   ]"
-        "[  OYYOOXWWWWTWWWWXOOYYO  ]"
-        "[  OYOXXXIWWWWWWWIXXXOYO  ]"
-        "[   OXXXXIIIIWIIIIXXXXO   ]"
-        "[    XXXOIIIIIIIIIOXXX    ]"
-        "[   XXXOYOIIIIIIIOYOXXX   ]"
-        "[  XXXOYYOIIIIIIIOYYOXXX  ]"
-        "[ TTT  OO HIIIIIH OO  TTT ]"
-        "[ TTT    HHHIIIHHH    TTT ]"
-        "[       HHHHHIHHHHH       ]"
-        "[       HHXHHHHHXHH       ]"
-        "[      HHXXXHHHXXXHH      ]"
-        "[      HZXXXXHXXXXZH      ]"
-        "[      HZXXXZHZXXXZH      ]"
-        "[      ZXXXZXXXZXXXZ      ]"
-        "[      ZXXXZXXXZXXXZ      ]"
-        "[     ZXXXZXXXXXZXXXZ     ]"
-        "[    ZXXXXZXXXXXZXXXXZ    ]"
-        "[    ZXXXXZXXXXXZXXXXZ    ]"
-        "[   ZXXXXZXXXXXXXZXXXXZ   ]"
-        "[   ZXXXXZXXXXXXXZXXXXZ   ]"
-        "[  ZXXXXZXXXXXXXXXZXXXXZ  ]"
-        "[ ZXXXXZXXXXXXXXXXXZXXXXZ ]"
-        "[ ZXXXZXXXXXXXXXXXXXZXXXZ ]"
-        "[ZXXXZXXXXXXXXXXXXXXXZXXXZ]"
-        "[ZXXZXXXXXXXXXXXXXXXXXZXXZ]"
-        "[ ZXZXXXXXXXXXXXXXXXXXZXZ ]"
-        "[  ZZZZZXXXXXXXXXXXZZZZZ  ]"
-        "[       ZZZZZZZZZZZ       ]"; 
+    string pionBlanc =
+        "[       KKKKKK                     ]"
+        "[      K445445KK                   ]"
+        "[     K44545445KK                  ]"
+        "[    K445554544KK                  ]"
+        "[    KKK444KTTTK                   ]"
+        "[    K45454TKKTK                   ]"
+        "[    KK45KKTWKTKK        KKKKKK    ]"
+        "[     K4KTKTTTTTK       K4GSSSGK   ]"
+        "[     K4KTTTTTTK       K4GSSSSSGK  ]"
+        "[      KTKTTTTJK      KGSWKKKKKWGK ]"
+        "[     KTTTKTTTTK      KGWK     KW4 ]"
+        "[    KLTTTTKTTWJK    K4WK       KSK]"
+        "[   KJATTTTTTTTKJK   KGWK       KGK]"
+        "[  KJLLATTTTTALKJK   KSWK        4K]"
+        "[ KJLJLA9TTTTT9KJK   K8WK        KK]"
+        "[ KJLAJLA99TTT9JKKK  KWSK         K]"
+        "[KJLAALLLL99T9ALKLK K8WG          K]"
+        "[KJKJLLJLLJA99JLKAKKKGSK           ]"
+        "[KKJJKJKJLLLJLAJKTTTTKK            ]"
+        "[KJLJJLJLLLAALLJKTTTTK             ]"
+        "[KLAALKJLLLALLLJKTTTTK             ]"
+        "[KLAL9LJJLLLLLLKKGTTTK             ]"
+        "[KLL9ALJJLLLALJKG8KTTK             ]"
+        "[KLAALLJJJLLALLGWGKTTK             ]"
+        "[KLL99JJJJJLJJGWGKTTJ              ]"
+        "[KLAAJLLJJLLJG8SKLTTJ              ]"
+        "[KLAAJLJTTJJTTJJJJTJ               ]"
+        "[KLLJLLJTTTTTTTJKKK                ]"
+        "[ KLKLKTTTTTTTTK                   ]"
+        "[ KKKKKKKTTTTTKK                   ]"
+        "[ KJJLJJKKKKKKJK                   ]"
+        "[ KJLLLLKWS4KJLJK                  ]"
+        "[ KJLLALK8GKJLLJK                  ]"
+        "[ KJLLALJKKJJLLJK                  ]"
+        "[ KJLLALLJLLJLLJK                  ]"
+        "[ KJLLJALLLLJLLJK                  ]"
+        "[ KJJLJLJJALJJLLK                  ]"
+        "[  KJKJKJ%KKJJKKK                  ]"
+        "[  KJJJ%%%%JJ%%K                   ]"
+        "[  KJJ%%%U%JJ%UK                   ]"
+        "[  KJJ%%%U%JJ%UK                   ]"
+        "[   KJ%%%UUJJU%K                   ]"
+        "[   KJ%%UU%J%U%K                   ]"
+        "[   KJJ%U%%J%U%K                   ]"
+        "[   KJ%J%%JJ%%%K                   ]"
+        "[   K%%%%%JJ%U%K                   ]"
+        "[  KJ%%%%%JJ%%%K                   ]"
+        "[  KJ%%%U%JKKKKKK                  ]"
+        "[  KJ%%%U%JKGSGGK                  ]"
+        "[  KKKKKKKKKKK4GK                  ]"
+        "[  KGS8SGGKKK4KGK                  ]"
+        "[  KKKKK4GK4G8GK                   ]"
+        "[  K4SGGKGK4S8SK                   ]"
+        "[  KG8SGKKK4GSGK                   ]"
+        "[  KG8SGK K4GSGK                   ]"
+        "[  K48SGK KKGSGK                   ]"
+        "[  K4GSGK K4GGSKKKK                ]"
+        "[  KKGSGK K44SGSS8GK               ]"
+        "[  KKSGSKKKKKK44GS8SK              ]"
+        "[ KKGGSGSS8GKKKKKKKKK              ]"
+        "[ KKG4G4GGS8SK   KKK               ]"
+        "[  KKKKKKKKKKK                     ]";
 
-    string reineNoire =
-        "[            U            ]"
-        "[           UVU           ]"
-        "[           UVU           ]"
-        "[        LFUUUUUFL        ]"
-        "[       FUUUUUUUULF       ]"
-        "[      FLFFFLLLLFLF       ]"
-        "[      FLLFFFFLFFLLF      ]"
-        "[      FLFTTTFFTTFLF      ]"
-        "[     FLFTTTTTTTTTFLF     ]"
-        "[     FLLTQVTTTVQTLLF     ]"
-        "[     FLLTQQTTTQQTLLF     ]"
-        "[      FLCCTTTTTCCLF      ]"
-        "[     FLLFTTTTTTTFLLF     ]"
-        "[    FLLLLFTTRRTFLLLLF    ]"
-        "[   FLFWFFFFTTTFFFFWFLF   ]"
-        "[   FLFWWWTTTTTTTWWWFLF   ]"
-        "[  FLLFFNWWWWTWWWWNFFLLF  ]"
-        "[  FLFNNNEWWWWWWWENNNFLF  ]"
-        "[   FNNNNEEEEWEEEENNNNF   ]"
-        "[    NNNFEEEEEEEEEFNNN    ]"
-        "[   NNNFLFEEEEEEEFLFNNN   ]"
-        "[  NNNFLLFEEEEEEEFLLFNNN  ]"
-        "[ TTT  FF CEEEEEC FF  TTT ]"
-        "[ TTT    CCCEEECCC    TTT ]"
-        "[       CCCCCECCCCC       ]"
-        "[       CCNCCCCCNCC       ]"
-        "[      CCNNNCCCNNNCC      ]"
-        "[      CBNNNNCNNNNBC      ]"
-        "[      CBNNNBCBNNNBC      ]"
-        "[      BNNNBNNNBNNNB      ]"
-        "[      BNNNBNNNBNNNB      ]"
-        "[     BNNNBNNNNNBNNNB     ]"
-        "[    BNNNNBNNNNNBNNNNB    ]"
-        "[    BNNNNBNNNNNBNNNNB    ]"
-        "[   BNNNNBNNNNNNNBNNNNB   ]"
-        "[   BNNNNBNNNNNNNBNNNNB   ]"
-        "[  BNNNNBNNNNNNNNNBNNNNB  ]"
-        "[ BNNNNBNNNNNNNNNNNBNNNNB ]"
-        "[ BNNNBNNNNNNNNNNNNNBNNNB ]"
-        "[BNNNBNNNNNNNNNNNNNNNBNNNB]"
-        "[BNNBNNNNNNNNNNNNNNNNNBNNB]"
-        "[ BNBNNNNNNNNNNNNNNNNNBNB ]"
-        "[  BBBBBNNNNNNNNNNNBBBBB  ]"
-        "[       BBBBBBBBBBB       ]";
+    string pionNoire =
+        "[                     KKKKKK       ]"
+        "[                   KK544544K      ]"
+        "[                  KK54454544K     ]"
+        "[                  KK445455544K    ]"
+        "[                   KTTTK444KKK    ]"
+        "[                   KTKKT45454K    ]"
+        "[    KKKKKK        KKTKWTKK45KK    ]"
+        "[   KGSSSG4K       KTTTTTKTK4K     ]"
+        "[  KGSSSSSG4K       KTTTTTTK4K     ]"
+        "[ KGWKKKKKWSGK      KJTTTTKTK      ]"
+        "[ 4WK     KWGK      KTTTTKTTTK     ]"
+        "[KSK       KW4K    KJWTTKTTTTLK    ]"
+        "[KSK       KWGK   KJKTTTTTTTTAJK   ]"
+        "[K4        KWSK   KJKLATTTTTALLJK  ]"
+        "[KK        KW8K   KJK9TTTTT9ALJLJK ]"
+        "[K         KSWK  KKKJ9TTT99ALJALJK ]"
+        "[K          GW8K KLKLA9T99LLLLAALJK]"
+        "[           KSGKKKAKLJ99AJLLJLLJKJK]"
+        "[            KKTTTTKJALJLLLJKJKJJKK]"
+        "[             KTTTTKJLLAALLLJLJJLJK]"
+        "[             KTTTTKJLLLALLLJKLAALK]"
+        "[             KTTTGKKLLLLLLJJL9LALK]"
+        "[             KTTK8GKJLALLLJJLA9LLK]"
+        "[             KTTKGWGLLALLJJJLLAALK]"
+        "[              JTTKGWGJJLJJJJJ99LLK]"
+        "[              JTTLKS8GJLLJJLLJAALK]"
+        "[               JTJJJJTTJJTTJLJAALK]"
+        "[                KKKJTTTTTTTJLLJLLK]"
+        "[                   KTTTTTTTTKLKLK ]"
+        "[                   KKTTTTTKKKKKKK ]"
+        "[                   KJKKKKKKJJLJJK ]"
+        "[                  KJLJK4SWKLLLLJK ]"
+        "[                  KJLLJKG8KLALLJK ]"
+        "[                  KJLLJJKKJLALLJK ]"
+        "[                  KJLLJLLJLLALLJK ]"
+        "[                  KJLLJLLLLAJLLJK ]"
+        "[                  KLLJJLAJJLJLJJK ]"
+        "[                  KKKJJKK%JKJKJK  ]"
+        "[                   K%%JJ%%%%JJJK  ]"
+        "[                   UK%JJ%U%%%JJK  ]"
+        "[                   UK%JJ%U%%%JJK  ]"
+        "[                   K%UJJUU%%%JK   ]"
+        "[                   K%U%J%UU%%JK   ]"
+        "[                   K%U%J%%U%JJK   ]"
+        "[                   K%%%JJ%%J%JK   ]"
+        "[                   K%U%JJ%%%%%K   ]"
+        "[                   K%%%JJ%%%%%JK  ]"
+        "[                  KKKKKKJ%U%%%JK  ]"
+        "[                  KGGSGKJ%U%%%JK  ]"
+        "[                  KG4KKKKKKKKKKK  ]"
+        "[                  KGK4KKKGGS8SGK  ]"
+        "[                   KG8G4KG4KKKKK  ]"
+        "[                   KS8S4KGKGGS4K  ]"
+        "[                   KGSG4KKKGS8GK  ]"
+        "[                   KGSG4K KGS8GK  ]"
+        "[                   KGSGKK KGS84K  ]"
+        "[                KKKKSGG4K KGSG4K  ]"
+        "[               KG8SSGS44K KGSGKK  ]"
+        "[              KS8SG44KKKKKKSGSKK  ]"
+        "[              KKKKKKKKKG8SSGSGGKK ]"
+        "[               KKK   KS8SGG4G4GKK ]"
+        "[                     KKKKKKKKKKK  ]";
+
+    string Win =
+
+        "[   00000      00000   0000000   00000   00000      00000       00000       00000    00000    000000000      00000   ]"
+        "[    00000    00000   000000000  00000   00000       00000     0000000     00000     00000    0000000000     00000   ]"
+        "[      0000  00000   000    000  00000   00000        00000   000000000   00000      00000    00000 00000    00000   ]"
+        "[       00000000     000    000  00000   00000         00000 0000   0000 00000       00000    00000  00000   00000   ]"
+        "[        000000      000    000  00000   00000          00000000     00000000        00000    00000   00000  00000   ]"
+        "[        000000      000    000  00000   00000           000000       000000         00000    00000    00000 00000   ]"
+        "[        000000      0000000000  0000000000000            0000         0000          00000    00000     0000000000   ]"
+        "[        000000       0000000    0000000000000             00           00           00000    00000      000000000   ]";
 
 
-    string tourRouge =
-        "[            YY            ]"
-        "[            II            ]"
-        "[           IIII           ]"
-        "[           IIII           ]"
-        "[          IIIIII          ]"
-        "[          J2222J          ]"
-        "[      Y   J2JJ2J   Y      ]"
-        "[      I   J2JJ2J   I      ]"
-        "[      I   J2222J   I      ]"
-        "[     III  J2222J  III     ]"
-        "[     III  J2JJ2J  III     ]"
-        "[    IIIII J2JJ2J IIIII    ]"
-        "[    J222J J2222J J222J    ]"
-        "[    J2J2JJJJJJJJJJ2J2J    ]"
-        "[  Y J2J2J22222222J2J2J Y  ]"
-        "[  I J2J2J222JJ222J2J2J I  ]"
-        "[  I J222J22JNNJ22J222J I  ]"
-        "[ IIIJ222J22JNNJ22J222JIII ]"
-        "[ IIIJ222J222JJ222J222JIII ]"
-        "[IIIII222J22222222J222IIII ]"
-        "[J222J222J22222222J222J222J]"
-        "[J222J2JJJ2JJJ2JJJJJJJJ222J]"
-        "[J222JJJ2JJJ2JJJ2JJJ2JJ222J]"
-        "[J222J2222222222222222J222J]"
-        "[J2J2J2222222222222222J2J2J]"
-        "[J2J2J2222222222222222J2J2J]"
-        "[J2J2J2222222112222222J2J2J]"
-        "[J222J2222221//1222222J222J]"
-        "[J222J222221////122222J222J]"
-        "[J222J222221//1/122222J222J]"
-        "[J222J222221//1/122222J222J]"
-        "[J222J222221//1/122222J222J]"
-        "[J222J222221////122222J222J]"
-        "[J222J222221////122222J222J]"
-        "[JJJJJJJJJJ111111JJJJJJJJJJ]"
-        ;
+    float Zoom;
+    int IdTex;
+    V2 Size;
+    string Texture;
 
-    string tourNoir = "[            YY            ]"
-        "[            ??            ]"
-        "[           ????           ]"
-        "[           ????           ]"
-        "[          ??????          ]"
-        "[          J++++J          ]"
-        "[      Y   J+JJ+J   Y      ]"
-        "[      ?   J+JJ+J   ?      ]"
-        "[      ?   J++++J   ?      ]"
-        "[     ???  J++++J  ???     ]"
-        "[     ???  J+JJ+J  ???     ]"
-        "[    ????? J+JJ+J ?????    ]"
-        "[    J+++J J++++J J+++J    ]"
-        "[    J+J+JJJJJJJJJJ+J+J    ]"
-        "[  Y J+J+J++++++++J+J+J Y  ]"
-        "[  ? J+J+J+++JJ+++J+J+J ?  ]"
-        "[  ? J+++J++JVVJ++J+++J ?  ]"
-        "[ ???J+++J++JVVJ++J+++J??? ]"
-        "[ ???J+++J+++JJ+++J+++J??? ]"
-        "[?????+++J++++++++J+++???? ]"
-        "[J+++J+++J++++++++J+++J+++J]"
-        "[J+++J+JJJ+JJJ+JJJJJJJJ+++J]"
-        "[J+++JJJ+JJJ+JJJ+JJJ+JJ+++J]"
-        "[J+++J++++++++++++++++J+++J]"
-        "[J+J+J++++++++++++++++J+J+J]"
-        "[J+J+J++++++++++++++++J+J+J]"
-        "[J+J+J+++++++11+++++++J+J+J]"
-        "[J+++J++++++1331++++++J+++J]"
-        "[J+++J+++++133331+++++J+++J]"
-        "[J+++J+++++133131+++++J+++J]"
-        "[J+++J+++++133131+++++J+++J]"
-        "[J+++J+++++133131+++++J+++J]"
-        "[J+++J+++++133331+++++J+++J]"
-        "[J+++J+++++133331+++++J+++J]"
-        "[JJJJJJJJJJ111111JJJJJJJJJJ]";
-    string FouRouge =
-        "[                   KKKKKKKKK                                                ]"
-        "[                 KKRRRRRKSSSKKKKK                 KKKKKK                    ]"
-        "[                KRRRRRRRRKSKRRRRKKK           KKKKKKKKKKKK                  ]"
-        "[               KRRRKRRRRRRKRRRRRKSSK      KKKKKKKKKKKKKKKKK                 ]"
-        "[               KRRKSKRRRRRRRRRRRRKKKK   KKSSKKKKKKKKKKKKKSSK                ]"
-        "[              KRRRKSSKRRRRRRRRRRRRRRK  KKKKKKKKKKKKSKKKKKKKK                ]"
-        "[              KRRRKSKRRRRRRRRRKRRRRRRKKKKKKKKKKKKKSKKKKKKKKKK               ]"
-        "[             KRRRRRKRRRRRRRRRKSKRRRRRKKKKKKKKKKKKKKKKKKKKKKKK               ]"
-        "[             KRRRRRRRRRRRRRRKSSSKRRRRKKKKKKKKKKKKKKKKKKKKKKKKK              ]"
-        "[             KRRRRRRRRRRRRRRRKKKRRRRRKKKKSKKKKKKKKKKKKKKSKKKKK              ]"
-        "[            KRRRRRRRRRRKRRRRRRRRRRRRRKKKKSKKKKKKKKKKKKKKSKKKKK              ]"
-        "[            KRRRRRRRRRKSKRRRRRRRRRRRRKKKKKKKKKKKKKKKKKKKKKKKKKK             ]"
-        "[            KKKRRRRRKKKSSKRRRRRRRRRRRRKKKKKKKKSKKKKKKKKKKKKKKKK             ]"
-        "[            KSSKRRKK   KKRRRRRRRKKKRRRKKKKKKKKKSKKKKKKKKKKKKKKK             ]"
-        "[            KKSKRK       KRRRRRKSSSKRRKKKKKKKKKKKKKKK  KKKKKKSK             ]"
-        "[            KRKKRK       KRRRRRRKSKRRRKKKSKKKKKKKKKK      KKKKK             ]"
-        "[            KRRRRK       KRRRRRKKKKKKKKKKKKKKKKKKKK       KKKKK             ]"
-        "[             KRRK         KRRKKSSSSSSSKSSSSSSKKKKKK        KKK              ]"
-        "[             KRK          KRKSSSSSSSSSSSSSSSSSSKKK          K               ]"
-        "[              K            KKSSSSSSSSSSSSSSSSSSKK          KOK              ]"
-        "[             KOK           KKSKKKKKSSSSSSKKKKKSK           KOK              ]"
-        "[            KOOOK           KSKKKKKKSSSSKKKKKKSK            K               ]"
-        "[             KKK            KKKKKKKKSSSSKKKKKKSK                            ]"
-        "[                            KSKKKOKKSSSSKKOKKKSK                            ]"
-        "[                            KSKKKKKKSSSSKKKKKKSK                            ]"
-        "[                            KSKSSSKKSSSSKKSSSKSK                            ]"
-        "[                            KSSSSSSSSSSSSSSSSSSK                            ]"
-        "[                             KSSSSSSSSSSSSSSSSK                             ]"
-        "[                             KSKKKSSSSSSSSKKKSK                             ]"
-        "[                             KSSK!KKSSSSKK!KSSK                             ]"
-        "[                              KSK!K!KKKK!K!KSK                              ]"
-        "[   KK                         KSSKK!K!!K!KKSSK                         KK   ]"
-        "[  KGGK                         KSSSKKKKKKSSSK                         KGGK  ]"
-        "[ KGGGGK KK                      KKSSSSSSKSKK                      KK KGGGGK ]"
-        "[KGGGGGGKGGK             KKKKK     KKKSSKKK     KKKKK             KGGKGGGGGGK]"
-        "[KGGGGGGKGK             KRRRRRK    KKKKKKKK    KKKKKKK             KGKGGGGGGK]"
-        "[ KKGGGGGGKK           KRRRRRRRKKKKRRKKKKKKKKKKKKKKKKKK           KKGGGGGGKK ]"
-        "[   KKKKKKKK           KRRKKKKKKKKRRRRKKKKKKKRRKKKKKKKK           KRKKKKKK   ]"
-        "[   KKKKKKKK            KKKKKKKKKRRRRRKKKKKKKKRRRRRRKK            KRRRRRRK   ]"
-        "[    KKKKKKK           KKKKKKKKKRRRKRRKKKKKKKKKRRRRRRRK           KRRRRRK    ]"
-        "[    KKKRKKKK         KKKKKKKKKOKRKKKRRKKKRKKKOKRRRRRRRK         KRRKRRRK    ]"
-        "[    KKKKKKKK        KKKKKKRKKKOOKKKRRRKKKKRKOOKRRRKRRRRK        KRRRRRRK    ]"
-        "[     KKKKKKKK      KKKKKKKKKKKKKKKOKRKKKKOKRKKKRRRRRRRRRK      KRRRRRRK     ]"
-        "[     KKKKKKKKK   KKKKRKKKKKKKKKKKKOOKKRKOOKRRRRRRRRRRRRRRKK   KRRRRRRRK     ]"
-        "[      KKKKKRKKKKKKKKKKKKKKKKKKKKKKKKKKRRKKKRRRRRRRRRRRRRRRRKKKRRRRRRKK      ]"
-        "[      KKKKKKKKKKKKKKKKKKKKKKKKKRKKKKKKRRRRRRRRRRRRRRRRKRRRRRRRRRRRRRRK      ]"
-        "[       KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKRRRRRRRRKRRRKKRRRRRRRRRKRRRRRRK       ]"
-        "[        KKKKKKKKKKKKKKKKK  KKKKKKKKKKKRRRRRRRRRRRK  KRRRRRRRRRRRRRRK        ]"
-        "[         KKKKKKKRKKKKKKK   KKKKKKKRKKKRRRRRRRRRRRK   KRRRRRRRRRRRRK         ]"
-        "[          KKKKKKKKKKKKK    KKKKKKKKKKKRRRRRRRRRRK     KRRRKRRRRRRK          ]"
-        "[           KKKKKKKKKKK     KKKKKKKKKKKKRRRRRRRRRK      KKKKKKKKKK           ]"
-        "[                           KKKKKKKKKKKKRRRRRRRRRK                           ]"
-        "[                           KKKKRKKKKKKKRRKRRRRRRK                           ]"
-        "[                          KKKKKKKKKKKKKRRRRRRRRRRK                          ]"
-        "[                          KKKKKKKKKKKKKRRRRRKRRRRK                          ]"
-        "[                          KKKKKKKKKKKKKRRRRRRRRRRK                          ]"
-        "[                         KKKRKKKKKKKRKKRRRRRRRRRRRK                         ]"
-        "[                         KKKKKKKKKKKKKKRRRRRRRRKRRK                         ]"
-        "[                         KKKKKKKKKKKKKKRRRRRRRRRRRRK                        ]"
-        "[                         KKKKKKKKKKKKKKRRRRRRRRRRRRK                        ]"
-        "[                        KKKKKKKKKRKKKKKRRRKRRRRRRRRK                        ]"
-        "[                        KKRKKKKKKKKKKKRRRRRRRRRRRRRRK                       ]"
-        "[                        KKKKKKKKKKKKKKRRRRRRRRRRKRRRRK                      ]"
-        "[                       KKKKKKKKKKKKKKKRRRRRRRRRRRRRRRK                      ]"
-        "[                       KKKKKKKKKKKKKKKRRRRRRKKRRRRRRRK                      ]"
-        "[                       KKKKRKKKKKKKKKKRRRRRKKKKRRRRRK                       ]"
-        "[                       KKKKRKKKKKKKRKKRRRRRKKKKKRRRRK                       ]"
-        "[                       KKKKRRKKKKKRRKKKRRRKKKKKKKRRRK                       ]"
-        "[                       KKKKRRKKKKRRRRKKKRKKKKRKKKKRK                        ]"
-        "[                       KKKKRRRKKKRRRRKKKRKKKKKKKKKK                         ]"
-        "[                       KKKKKRRKKKRRKRKKKKKKKKKKKKKOK                        ]"
-        "[                        K  KRRRKRRRRRKKKOKKKKKKKKOOOK                       ]"
-        "[                       KOK KRRKOKRRRRKKOOOKKKKKKKKKKK                       ]"
-        "[                       KOK KRRKOKRRRRRKKKKKKKRKKKKKKKK                      ]"
-        "[                        K  KRRRKRRRRRRKKRKKKKKKKKKKKRKK                     ]"
-        "[                          KRRRRRRRRRRKKKKKKKKKKKKKKKKKKK                    ]"
-        "[                          KRRRRRKRRRK     KKKKKKKKKKKKKK                    ]"
-        "[                          KRRRRRRRRRK       KKKKKRKKKKKK                    ]"
-        "[                          KRKRRRRRRK         KKKKKKKKKKK                    ]"
-        "[                         KRRRRRRRRRK          KKKKKKKKKK                    ]"
-        "[                         KRRRRRRRRK           KKKKKKKKK                     ]"
-        "[                         KRRRRRRKRK          KKKKKKKRKK                     ]"
-        "[                        KRRRRRRRRRK          KKKKKKKKK                      ]"
-        "[                        KRKRRRRRRK          KKRKKKKKKK                      ]"
-        "[                        KRRRRKRRRK          KKKKKKKKKK                      ]"
-        "[                 KKK   KRRRRRRRRRK          KKKKKKKKK   KK                  ]"
-        "[                KKKKK  KRRRRRRRRK          KKKKKKKRKK  KRRK                 ]"
-        "[               KKKKK  KRRRRRRKRRK          KKKKKKKKKK   KRRK                ]"
-        "[               KKKKK  KRRRRRRRRRK         KRKKKKKKKKKK  KRRK                ]"
-        "[               KKKKKKKKKKRRRRRRK         KRRRRKKKKKKK  KRRRK                ]"
-        "[               KKKKKKKKKKKKKKKKK         KRRRRRRRRRRRKKRRRRK                ]"
-        "[                KKKKKKKKKKKKKKK          KRRRRRRRRRRRRRRRRK                 ]"
-        "[                 KKKKKKKKKKKKKK           KRRRRRRRRRRRRRRK                  ]"
-        "[                  KKKKKKKKKKKK             KKKRRRRRRRRRKK                   ]"
-        "[                    KKKKKKKKK                 KKKKKKKKK                     ]";
+    _Titre(int numIm)
+    {
+        if (numIm == 1)
+        {
+            Zoom = 5;
+            Texture = titre;
+        }
+        else if (numIm == 2)
+        {
+            Zoom = 300;
+            Texture = BG;
+        }
+
+        else if (numIm == 3)
+        {
+            Zoom = 3;
+            Texture = pionBlanc;
+        }
+
+        else if (numIm == 4)
+        {
+            Zoom = 3;
+            Texture = pionNoire;
+        }
+
+        else if (numIm == 5)
+        {
+            Zoom = 5;
+            Texture = Win;
+        }
+    }
 };
 
 struct deplacement {
@@ -2067,7 +1945,7 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
                     return v;
                 }
             }
-            alpha = max(beta, v);
+            alpha = max(alpha, v);
             changeBack(x);
             actualisePlateau();
         }
@@ -2103,29 +1981,53 @@ int finDePartie() {
     return -1;
 }
 void affichage_ecran_accueil() {
-    G2D::DrawStringFontMono(V2(50, 400), "Jeux d'echec",
-        20, 4, Color::White);
-    G2D::DrawStringFontMono(V2(80, 300), "Appuyez sur ENTER pour continuer.", 20,
-        3, Color::Green);
+    _Titre BG = _Titre(2);
+    BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
+    BG.Size = BG.Size * BG.Zoom;
+    G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
+
+    _Titre Titre = _Titre(1);
+    Titre.IdTex = G2D::InitTextureFromString(Titre.Size, Titre.Texture);
+    Titre.Size = Titre.Size * Titre.Zoom;
+    G2D::DrawRectWithTexture(Titre.IdTex, V2(100, 550), Titre.Size);
+
+    _Titre PionB = _Titre(3);
+    PionB.IdTex = G2D::InitTextureFromString(PionB.Size, PionB.Texture);
+    PionB.Size = PionB.Size * PionB.Zoom;
+    G2D::DrawRectWithTexture(PionB.IdTex, V2(120, 250), PionB.Size);
+
+    _Titre PionN = _Titre(4);
+    PionN.IdTex = G2D::InitTextureFromString(PionN.Size, PionN.Texture);
+    PionN.Size = PionN.Size * PionN.Zoom;
+    G2D::DrawRectWithTexture(PionN.IdTex, V2(390, 250), PionN.Size);
+
+    G2D::DrawStringFontMono(V2(100, 100), "Appuyez sur ENTER pour continuer.", 20, 3, Color::White);
 }
 //end
 
 void affichage_ecran_options() {
+    _Titre BG = _Titre(2);
+    BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
+    BG.Size = BG.Size * BG.Zoom;
+    G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
+
     G2D::DrawStringFontMono(V2(100, 500), "Choisissez votre difficulte !", 23, 3,
         Color::White);
     G2D::DrawStringFontMono(V2(50, 300),
         "Appuyez sur A pour jouer les blancs contre l'ia", 16, 3,
-        Color::Green);
+        Color::Blue);
     G2D::DrawStringFontMono(V2(50, 250),
         "Appuyez sur B pour jouer les noirs contre l'ia", 16, 3,
         Color::Yellow);
     G2D::DrawStringFontMono(V2(50, 200),
-        "Appuyez sur C pour jouer en JCJ", 16, 3,
+        "Appuyez sur C pour jouer en PvP", 16, 3,
         Color::Red);
 }
 //END
 
 void affichage_init_partie() {
+    G2D::DrawStringFontMono(V2(10, 150), "CONSEIL : Creez des desequilibres si vous voulez gagner !", 16, 3,
+        Color::White);
     G2D::DrawStringFontMono(V2(220, 100), "Appuyez sur ENTER", 16, 3, Color::Cyan);
     G2D::DrawCircle(V2(150, 250), 50, Color::Green);
     G2D::DrawCircle(V2(450, 450), 30, Color::Cyan);
@@ -2180,10 +2082,20 @@ void affichage_ecran_jeu() {
 }
 //end
 void affichage_ecran_victoire_blanc() {
-    G2D::DrawStringFontMono(V2(70, 500), "VIctoireBLanc", 80, 10, Color::Red);
+    _Titre BG = _Titre(2);
+    BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
+    BG.Size = BG.Size * BG.Zoom;
+    G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
+
+    _Titre Win = _Titre(5);
+    Win.IdTex = G2D::InitTextureFromString(Win.Size, Win.Texture);
+    Win.Size = Win.Size * Win.Zoom;
+    G2D::DrawRectWithTexture(Win.IdTex, V2(30, 300), Win.Size);
+
+    //G2D::DrawStringFontMono(V2(70, 500), "You WIN !!!!", 80, 10, Color::Green);
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur ENTER pour faire une autre partie.", 16,
-        3, Color::Green);
+        3, Color::White);
 }
 //end
 
@@ -2272,7 +2184,7 @@ int gestion_ecran_jeu() {
     if (G.getJoueur()==G.joueurIa)
     {
        actualisePlateau();
-       IaN(-2000, 2000, false, false, 4);
+       IaN(-2000, 2000, false, false, 2);
        G.setJoueur();
     }
     else

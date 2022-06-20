@@ -236,6 +236,7 @@ void InitColors()
 	AssignColor('7', 153, 255, 51); //jaune-vert clair
 
 	AssignColor('O', 255, 215, 0); // or
+	AssignColor('0', 255, 225, 0); // or avec + 10 en vert
 	AssignColor('Y', 255, 255, 0); // yellow
 	AssignColor('%', 102, 102, 0); // jauneCouronne kaki foncé
 	AssignColor('U', 153, 153, 0); // jauneCouronne kaki?
