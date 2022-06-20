@@ -1600,11 +1600,7 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
                     }
                 }
             }
-            if (leMort != -1)
-            {
-                G.pieces[leMort].setEstVivant(true);
-
-            }
+            
             G.pieces[15].setTypePiece(6);
 
             if (DeplacementPiece(G.pieces[15], G.pieces[31].getCoord()))
@@ -1612,22 +1608,46 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[15].setTypePiece(5);
+                if (leMort != -1)
+                {
+                    G.pieces[leMort].setEstVivant(true);
+
+                }
                 return false;
             }
             G.pieces[15].setTypePiece(5);
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
+            }
         }
         else
         {
-            for (int i = 0; i < 15; i++) {
-                if (G.pieces[i].getEstVivant()) {
+            for (int i = 0; i < 15; i++)
+            {
+                if (G.pieces[i].getCoord() == pNewPos && G.pieces[i].getEstVivant())
+                {
+                    leMort = i;
+                    G.pieces[i].setEstVivant(false);
+                }
+                else if (G.pieces[i].getEstVivant())
+                {
 
-                    if (DeplacementPiece(G.pieces[i], pNewPos)) {
+                    if (DeplacementPiece(G.pieces[i], pNewPos))
+                    {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        if (leMort != -1)
+                        {
+                            G.pieces[leMort].setEstVivant(true);
+
+                        }
                         return false;
                     }
                 }
             }
+
             G.pieces[15].setTypePiece(6);
 
             if (DeplacementPiece(G.pieces[15], pNewPos))
@@ -1635,9 +1655,19 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[15].setTypePiece(5);
+                if (leMort != -1)
+                {
+                    G.pieces[leMort].setEstVivant(true);
+
+                }
                 return false;
             }
             G.pieces[15].setTypePiece(5);
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
+            }
         }
         
     }
@@ -1664,40 +1694,67 @@ bool NoSuicideMove(_Piece Piece, V2 pNewPos) {
                     }
                 }
             }
-            if (leMort != -1)
-            {
-                G.pieces[leMort].setEstVivant(true);
-
-            }
+            
             G.pieces[31].setTypePiece(6);
             if (DeplacementPiece(G.pieces[31], G.pieces[15].getCoord())) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[31].setTypePiece(5);
+                if (leMort != -1)
+                {
+                    G.pieces[leMort].setEstVivant(true);
+
+                }
                 return false;
             }
             G.pieces[31].setTypePiece(5);
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
+            }
         }
         else 
         {
             for (int i = 16; i < 31; i++) {
-                if (G.pieces[i].getEstVivant()) {
+                if (G.pieces[i].getCoord() == pNewPos && G.pieces[i].getEstVivant())
+                {
+                    leMort = i;
+                    G.pieces[i].setEstVivant(false);
+                }
+                else if (G.pieces[i].getEstVivant()) {
 
                     if (DeplacementPiece(G.pieces[i], pNewPos)) {
                         G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                         G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
+                        if (leMort != -1)
+                        {
+                            G.pieces[leMort].setEstVivant(true);
+
+                        }
                         return false;
                     }
                 }
             }
+
             G.pieces[31].setTypePiece(6);
             if (DeplacementPiece(G.pieces[31], pNewPos)) {
                 G.Plateau.setPositionPiece(pNewPos.x, pNewPos.y, to_string(pastPlateau));
                 G.Plateau.setPositionPiece(vCoord.x, vCoord.y, to_string(Piece.getCouleur()));
                 G.pieces[31].setTypePiece(5);
+                if (leMort != -1)
+                {
+                    G.pieces[leMort].setEstVivant(true);
+
+                }
                 return false;
             }
             G.pieces[31].setTypePiece(5);
+            if (leMort != -1)
+            {
+                G.pieces[leMort].setEstVivant(true);
+
+            }
         }
 
         
@@ -1901,9 +1958,9 @@ vector<deplacement> DePossible(int joueur)
                             }
                         }
                     }
-                    else if (i != 31 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.estVivant)
+                    else if (i != 31 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
                     {
-                        if (NoSuicideMove(vPiece, V2(k, j)) && vPiece.estVivant) {
+                        if (NoSuicideMove(vPiece, V2(k, j))) {
                             DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
                             //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
                         }
@@ -1934,7 +1991,7 @@ vector<deplacement> DePossible(int joueur)
                             }   
                         }
                     }
-                    else if (i != 15 && DeplacementPiece(vPiece, V2(k, j)))
+                    else if (i != 15 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
                     {
                         if (NoSuicideMove(vPiece, V2(k, j))) {
                             DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
@@ -2291,10 +2348,13 @@ int gestion_ecran_jeu() {
                             if (G.pieces[G.pieceEncours].getNoMove()) {
                                 G.pieces[G.pieceEncours].setNoMove(false);
                             }
+                            if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
+                                G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
+                            }
                         }
                         else if (G.Plateau.getPositionPiece(V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) != G.pieces[G.pieceEncours].getCouleur()) {
                             for (_Piece& piece : G.pieces) {
-                                if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80))) {
+                                if (piece.getCoord() == V2((int)(G.xMouse / 80), (int)(G.yMouse / 80)) && piece.getEstVivant()) {
                                     piece.setEstVivant(false);
                                 }
                             }
@@ -2304,10 +2364,12 @@ int gestion_ecran_jeu() {
                             if (G.pieces[G.pieceEncours].getNoMove()) {
                                 G.pieces[G.pieceEncours].setNoMove(false);
                             }
+                            if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
+                                G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
+                            }
+                            
                         }
-                        if ((G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 7 && G.pieces[G.pieceEncours].getCouleur() == 1) || (G.pieces[G.pieceEncours].getTypePiece() == 0 && G.pieces[G.pieceEncours].getCoord().y == 0 && G.pieces[G.pieceEncours].getCouleur() == 2)) {
-                            G.pieces[G.pieceEncours] = _Dame(G.pieces[G.pieceEncours].getCoord(), G.pieces[G.pieceEncours].getCouleur());
-                        }
+                        
 
                         G.setJoueur();
                     }
@@ -2315,6 +2377,7 @@ int gestion_ecran_jeu() {
                 G.pieceEncours = -1;
             }
         }
+
     }
     int finpartie = finDePartie();
     if (finpartie != -1) {
