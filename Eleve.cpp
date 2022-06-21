@@ -2096,6 +2096,10 @@ int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
 
                 if (fils)
                 {
+                    if (DP[i].aChanger)
+                    {
+                        G.pieces[DP[i].indexP] = _Pion(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+                    }
                     changeBack(x);
                     actualisePlateau();
                     return v;
