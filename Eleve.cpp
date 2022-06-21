@@ -30,15 +30,7 @@ struct _plateau {
         " M M M M"
         ;
 
-    string textureMur = "[66666666]"
-        "[66666666]"
-        "[66666666]"
-        "[66666666]"
-        "[66666666]"
-        "[66666666]"
-        "[66666666]"
-        "[66666666]";
-    string textureSol = "[77777777]"
+    string textureMur = "[77777777]"
         "[77777777]"
         "[77777777]"
         "[77777777]"
@@ -46,6 +38,14 @@ struct _plateau {
         "[77777777]"
         "[77777777]"
         "[77777777]";
+    string textureSol = "[66666666]"
+        "[66666666]"
+        "[66666666]"
+        "[66666666]"
+        "[66666666]"
+        "[66666666]"
+        "[66666666]"
+        "[66666666]";
     string texturePossible = "[        ]"
         "[   GG   ]"
         "[  G  G  ]"
@@ -2262,7 +2262,11 @@ void affichage_ecran_jeu() {
             G2D::DrawRectWithTexture(G.pieces[G.pieceEncours].IdTex, V2((G.xMouse - G.pieces[G.pieceEncours].Size.x / 2), G.yMouse - G.pieces[G.pieceEncours].Size.y / 2), G.pieces[G.pieceEncours].Size);
         }
     }
-
+    if (G.TimerEnd > 0 && G.TimerEnd < 80)
+    {
+        G2D::DrawStringFontMono(V2(50, 300), "CHECKMATE!!", 80, 20,
+            Color::Black);
+    }
 }
 //end
 void affichage_ecran_victoire_blanc() 
@@ -2380,8 +2384,9 @@ int gestion_ecran_jeu() {
     //l'integralité des fonctionnements gameplay / imput
 
     //cout << DeplacementPiece(_Pion(V2(6, 1), 1, 0), V2(6, 3)) << endl;
-    if (G.TimerEnd > 0 && G.TimerEnd < 30)
+    if (G.TimerEnd > 0 && G.TimerEnd < 80)
     {
+        cout << G.TimerEnd<<endl;
         G.setTimerEnd(G.TimerEnd + 1);
         return 3;
     }
@@ -2501,6 +2506,7 @@ int gestion_ecran_jeu() {
         if (G.TimerEnd <= 0)
         {
             G.setTimerEnd(1);
+            return 3;
         }
 
         if (finpartie == 1) {
