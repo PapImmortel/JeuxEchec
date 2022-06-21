@@ -853,6 +853,11 @@ struct _Titre
         "[QQQQQ]"
         "[QQQQQ]";
 
+    string BG2 =
+        "[WWWWW]"
+        "[WWWWW]"
+        "[WWWWW]";
+
     string pionBlanc =
         "[       KKKKKK                     ]"
         "[      K445445KK                   ]"
@@ -992,6 +997,48 @@ struct _Titre
         "[        000000      0000000000  0000000000000            0000         0000          00000    00000     0000000000   ]"
         "[        000000       0000000    0000000000000             00           00           00000    00000      000000000   ]";
 
+    string Tie =
+
+        "[  KKKKKKKKKKKKKK     KKKKKKKK     KKKKKKKKKKKKKK  ]"
+        "[  KKKKKKKKKKKKKK     KKKKKKKK     KKKKKKKKKKKKKK  ]"
+        "[  KKKKKKKKKKKKKK     KKKKKKKK     KKKKKKKK        ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKK        ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKKKKKKK   ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKKKKKKK   ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKK        ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKK        ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKKKKKKKK  ]"
+        "[      KKKKKK         KKKKKKKK     KKKKKKKKKKKKKK  ]";
+
+    string Roi =
+        "[  K  KKKKKKK  K  ]"
+        "[ KOKKRORRRORKKOK ]"
+        "[ KOOROOOROOOROOK ]"
+        "[ KOOOOOOOOOOOOOK ]"
+        "[ KWAWAAWAWAAWAWK ]"
+        "[ KOOOOOOOOOOOOOK ]"
+        "[ KJTWRTTTTTRWTJK ]"
+        "[ KJTWKTTTTTKWTJK ]"
+        "[KJTTWWTTTTTWWTTJK]"
+        "[KJTTTTJJJJJTTTTJK]"
+        "[KJJJTJTTTTTJTJJJK]"
+        "[ KJJTJTTJTTJTJJK ]"
+        "[  KJJJJJJJJJJJK  ]"
+        "[  KKJJJJJJJJJSK  ]"
+        "[ Y KSSSSCSSSSKK  ]"
+        "[YAY KKKSCSKKKWK  ]"
+        "[ YKPWWWSCSWWWPK  ]"
+        "[ GKPPPWSCSWPPPK  ]"
+        "[ YPPPPWBCBWPPPK  ]"
+        "[ G KPPWMMMWPPKK  ]"
+        "[ G KPPWBCBWPPTK  ]"
+        "[ G KPPWBCBWPPK   ]"
+        "[ G KPPWBCBWPPK   ]"
+        "[ G KPPWBCBWPPK   ]"
+        "[ G KKKWBCBWKKK   ]"
+        "[      KKKKK      ]";
+
+
 
     float Zoom;
     int IdTex;
@@ -1027,6 +1074,24 @@ struct _Titre
         {
             Zoom = 5;
             Texture = Win;
+        }
+
+        else if (numIm == 6)
+        {
+            Zoom = 300;
+            Texture = BG2;
+        }
+
+        else if (numIm == 7)
+        {
+            Zoom = 6;
+            Texture = Tie;
+        }
+
+        else if (numIm == 8)
+        {
+            Zoom = 6;
+            Texture = Roi;
         }
     }
 };
@@ -2022,6 +2087,8 @@ int finDePartie() {
     return -1;
 }
 void affichage_ecran_accueil() {
+    //G2D::DrawRectangle(V2(0, 0), V2(640, 640), Color::Green, true);
+
     _Titre BG = _Titre(2);
     BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
     BG.Size = BG.Size * BG.Zoom;
@@ -2043,8 +2110,7 @@ void affichage_ecran_accueil() {
     G2D::DrawRectWithTexture(PionN.IdTex, V2(390, 250), PionN.Size);
 
     G2D::DrawStringFontMono(V2(100, 100), "Appuyez sur ENTER pour continuer.", 20, 3, Color::White);
-}
-//end
+}//end
 
 void affichage_ecran_options() {
     _Titre BG = _Titre(2);
@@ -2055,25 +2121,37 @@ void affichage_ecran_options() {
     G2D::DrawStringFontMono(V2(100, 500), "Choisissez votre difficulte !", 23, 3,
         Color::White);
     G2D::DrawStringFontMono(V2(50, 300),
-        "Appuyez sur A pour jouer les blancs contre l'ia", 16, 3,
-        Color::Blue);
+        "Appuyez sur A pour jouer les blancs contre l'IA", 16, 3,
+        Color::Green);
     G2D::DrawStringFontMono(V2(50, 250),
-        "Appuyez sur B pour jouer les noirs contre l'ia", 16, 3,
+        "Appuyez sur B pour jouer les noirs contre l'IA", 16, 3,
         Color::Yellow);
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur C pour jouer en PvP", 16, 3,
-        Color::Red);
+        Color::Blue);
 }
 //END
 
 void affichage_init_partie() {
-    G2D::DrawStringFontMono(V2(10, 150), "CONSEIL : Creez des desequilibres si vous voulez gagner !", 16, 3,
+    _Titre BG = _Titre(2);
+    BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
+    BG.Size = BG.Size * BG.Zoom;
+    G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
+
+    _Titre roi = _Titre(8);
+    roi.IdTex = G2D::InitTextureFromString(roi.Size, roi.Texture);
+    roi.Size = roi.Size * roi.Zoom;
+    G2D::DrawRectWithTexture(roi.IdTex, V2(250, 280), roi.Size);
+
+
+    G2D::DrawStringFontMono(V2(10, 150), "CONSEIL : N'hesitez pas à utiliser le rocque pour mettre ", 16, 3,
         Color::White);
-    G2D::DrawStringFontMono(V2(220, 100), "Appuyez sur ENTER", 16, 3, Color::Cyan);
-    G2D::DrawCircle(V2(150, 250), 50, Color::Green);
-    G2D::DrawCircle(V2(450, 450), 30, Color::Cyan);
-    G2D::DrawCircle(V2(250, 550), 60, Color::Blue);
-    G2D::DrawCircle(V2(500, 50), 30, Color::Magenta);
+    G2D::DrawStringFontMono(V2(60, 130), "a l'abri votre roi et developper une de vos pieces", 16, 3, Color::White);
+
+    G2D::DrawStringFontMono(V2(220, 80), "Appuyez sur ENTER", 16, 3, Color::White);
+
+    G2D::DrawStringFontMono(V2(190, 590), "LOADING...", 40, 3, Color::White);
+
 }
 //ecran chargement
 void affichage_ecran_jeu() {
@@ -2122,7 +2200,8 @@ void affichage_ecran_jeu() {
 
 }
 //end
-void affichage_ecran_victoire_blanc() {
+void affichage_ecran_victoire_blanc() 
+{
     _Titre BG = _Titre(2);
     BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
     BG.Size = BG.Size * BG.Zoom;
@@ -2147,10 +2226,18 @@ void affichage_ecran_victoire_noir() {
         3, Color::White);
 }
 void affichage_ecran_pat() {
-    G2D::DrawStringFontMono(V2(70, 500), "PAT", 80, 10, Color::Green);
-    G2D::DrawStringFontMono(V2(50, 200),
-        "Appuyez sur ENTER pour faire une autre partie.", 16,
-        3, Color::White);
+    _Titre BG = _Titre(6);
+    BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
+    BG.Size = BG.Size * BG.Zoom;
+    G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
+
+    _Titre Tie = _Titre(7);
+    Tie.IdTex = G2D::InitTextureFromString(Tie.Size, Tie.Texture);
+    Tie.Size = Tie.Size * Tie.Zoom;
+    G2D::DrawRectWithTexture(Tie.IdTex, V2(160, 300), Tie.Size);
+
+    G2D::DrawStringFontMono(V2(100, 100), "Appuyez sur ENTER pour continuer.", 20, 3, Color::Black);
+
 }
 //end
 void render() {
@@ -2225,7 +2312,7 @@ int gestion_ecran_jeu() {
     if (G.getJoueur()==G.joueurIa)
     {
        actualisePlateau();
-       IaN(G.joueurIa, -2000, 2000, false, false, 2);
+       IaN(G.joueurIa, -2000, 2000, false, false, 3);
        G.setJoueur();
     }
     else
