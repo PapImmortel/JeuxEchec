@@ -1163,6 +1163,8 @@ struct GameData {
     int yMouse;
     int Lpix = 80;
     V2 Size;
+    int TimerEnd;
+    void setTimerEnd(int _TimerEnd) { TimerEnd = _TimerEnd; }
     int IdTexMur;
     int IdTexSol;
     int IdTexPossible;
@@ -2367,6 +2369,7 @@ int InitPartie() {
         G.setPieces();
         G.Plateau.resetPlateau();
         G.joueur = 1;
+        G.setTimerEnd(0);
         //réinitialise la game
         return 3;
     }
@@ -2377,6 +2380,11 @@ int gestion_ecran_jeu() {
     //l'integralité des fonctionnements gameplay / imput
 
     //cout << DeplacementPiece(_Pion(V2(6, 1), 1, 0), V2(6, 3)) << endl;
+    if (G.TimerEnd > 0 && G.TimerEnd < 30)
+    {
+        G.setTimerEnd(G.TimerEnd + 1);
+        return 3;
+    }
     if (G.getJoueur()==G.joueurIa)
     {
        actualisePlateau();
@@ -2490,6 +2498,11 @@ int gestion_ecran_jeu() {
     }
     int finpartie = finDePartie();
     if (finpartie != -1) {
+        if (G.TimerEnd <= 0)
+        {
+            G.setTimerEnd(1);
+        }
+
         if (finpartie == 1) {
             return 4;
         }
