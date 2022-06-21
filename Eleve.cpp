@@ -1658,11 +1658,79 @@ void setZonesJouables(_Piece pieceActuelle) {
     }
 }
 //IA 
+vector<deplacement> DePossible(int joueur)
+{
+    vector < deplacement > DP = {};
+    if (joueur == 1)
+    {
+        for (int i = 16; i < 32; i++)
+        {
+            _Piece vPiece = G.pieces[i];
+            for (int k = 0; k < 8; k++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == 31 && (abs(vPiece.pos.x - k) < 2))
+                    {
+                        if (DeplacementPiece(vPiece, V2(k, j)))
+                        {
+                            if (NoSuicideMove(vPiece, V2(k, j))) {
+                                DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                                // std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                            }
+                        }
+                    }
+                    else if (i != 31 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
+                    {
+                        if (NoSuicideMove(vPiece, V2(k, j))) {
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                            //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        }
+                    }
 
-int point()
+                }
+            }
+        }
+        return DP;
+    }
+    else
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            _Piece vPiece = G.pieces[i];
+            for (int k = 0; k < 8; k++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == 15 && (abs(vPiece.pos.x - k) < 2))
+                    {
+                        if (DeplacementPiece(vPiece, V2(k, j)))
+                        {
+                            if (NoSuicideMove(vPiece, V2(k, j))) {
+                                DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                                //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                                int p = 0;
+                            }
+                        }
+                    }
+                    else if (i != 15 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
+                    {
+                        if (NoSuicideMove(vPiece, V2(k, j))) {
+                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
+                            //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
+                        }
+                    }
+                }
+            }
+        }
+        return DP;
+    }
+}
+
+int point(int joueur)
 {
     int point = 0;
-    int zoneAttaque = 0;
+
     for (int i = 0; i < 32; i++)
     {
 
@@ -1671,32 +1739,59 @@ int point()
         {
             if (P.estVivant)
             {
-                if (P.typePiece == 0) { point += 1; }
-                if (P.typePiece == 2) { point += 3; }
-                if (P.typePiece == 1) { point += 5; }
-                if (P.typePiece == 3) { point += 3; }
-                if (P.typePiece == 4) { point += 8; }
-                if (P.typePiece == 5) { point += 100; }
-                setZonesJouables(P);
-                zoneAttaque += G.zonesJouables.size();
+                if (P.typePiece == 0) { point += 10; }
+                if (P.typePiece == 2) { point += 30; }
+                if (P.typePiece == 1) { point += 50; }
+                if (P.typePiece == 3) { point += 30; }
+                if (P.typePiece == 4) { point += 80; }
+                if (P.typePiece == 5) { point += 1000; }
+                if (P.pos.x >= 3 && P.pos.y <= 4 && P.pos.y >= 3 && P.pos.x <= 4 && joueur == 2)
+                {
+                    point += 9;
+                }
+                if ((P.pos.x < 3 || P.pos.x > 4) && P.pos.y <= 4 && P.pos.y >= 3 && joueur == 2)
+                {
+                    point += 2;
+                }
+
             }
+
         }
         else
         {
             if (P.estVivant)
             {
-                if (P.typePiece == 0) { point -= 1; }
-                if (P.typePiece == 2) { point -= 3; }
-                if (P.typePiece == 1) { point -= 5; }
-                if (P.typePiece == 3) { point -= 3; }
-                if (P.typePiece == 4) { point -= 8; }
-                if (P.typePiece == 5) { point -= 100; }
-                setZonesJouables(P);
-                zoneAttaque -= G.zonesJouables.size();
+                if (P.typePiece == 0) { point -= 10; }
+                if (P.typePiece == 2) { point -= 30; }
+                if (P.typePiece == 1) { point -= 50; }
+                if (P.typePiece == 3) { point -= 30; }
+                if (P.typePiece == 4) { point -= 80; }
+                if (P.typePiece == 5) { point -= 1000; }
+                if (P.pos.x >= 3 && P.pos.y <= 4 && P.pos.y >= 3 && P.pos.x <= 4 && joueur == 1)
+                {
+                    point -= 9;
+                }
+                if ((P.pos.x < 3 || P.pos.x > 4) && P.pos.y <= 4 && P.pos.y >= 3 && joueur == 1)
+                {
+                    point -= 2;
+                }
+
             }
         }
     }
-    int score = point + zoneAttaque;
+    if (joueur == 1)
+    {
+        point = -point;
+        vector<deplacement> M = DePossible(1);
+        point += M.size() * (1 / 3);
+    }
+    else
+    {
+        vector<deplacement> M = DePossible(2);
+        point += M.size() * (1 / 3);
+
+    }
+    int score = point;
     return score;
 }
 //IA
@@ -1814,96 +1909,31 @@ void actualisePlateau()
     }
     //cout << G.Plateau.getPlateau() << endl;
 }
-vector<deplacement> DePossible(int joueur)
-{
-    vector < deplacement > DP = {};
-    if (joueur == 1)
-    {
-        for (int i = 16; i < 32; i++)
-        {
-            _Piece vPiece = G.pieces[i];
-            for (int k = 0; k < 8; k++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (i == 31 && (abs(vPiece.pos.x - k) < 2))
-                    {
-                        if (DeplacementPiece(vPiece, V2(k, j)))
-                        {
-                            if (NoSuicideMove(vPiece, V2(k, j))) {
-                                DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
-                                // std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
-                            }
-                        }
-                    }
-                    else if (i != 31 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
-                    {
-                        if (NoSuicideMove(vPiece, V2(k, j))) {
-                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
-                            //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
-                        }
-                    }
-
-                }
-            }
-        }
-        return DP;
-    }
-    else
-    {
-        for (int i = 0; i < 16; i++)
-        {
-            _Piece vPiece = G.pieces[i];
-            for (int k = 0; k < 8; k++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (i == 15 && (abs(vPiece.pos.x - k) < 2))
-                    {
-                        if (DeplacementPiece(vPiece, V2(k, j)))
-                        {
-                            if (NoSuicideMove(vPiece, V2(k, j))) {
-                                DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
-                                //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
-                                int p = 0;
-                            }   
-                        }
-                    }
-                    else if (i != 15 && DeplacementPiece(vPiece, V2(k, j)) && vPiece.getEstVivant())
-                    {
-                        if (NoSuicideMove(vPiece, V2(k, j))) {
-                            DP.push_back(deplacement(vPiece.pos, V2(k, j), i));
-                            //std::cout << "(" << vPiece.pos.x << vPiece.pos.y << ";" << k << j << ")" << endl;
-                        }
-                    }
-                }
-            }
-        }
-        return DP;
-    }
-}
-int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
+int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
 {
     int v;
     deplacement coup = deplacement(V2(9, 9), V2(9, 9));
     if (depth == 0)
     {
 
-        return point();
+        return point(joueur);
     }
-    if (abs(point() > 500))
+    if (abs(point(joueur) > 500))
     {
-        return point();
+        return point(joueur);
     }
     else if (EMin)
     {
         v = 2000;
-        vector<deplacement> DP = DePossible(1);
+        vector<deplacement> DP = DePossible(3 - joueur);
         int size = DP.size();
+
         for (int i = 0; i < size; i++)
         {
+
             deplacement y = changePos(DP[i].indexP, DP[i].Fin);
-            v = min(v, IaN(alpha, beta, false, true, depth - 1));
+            v = min(v, IaN(joueur, alpha, beta, false, true, depth - 1));
+
             if (alpha > v)
             {
                 if (fils)
@@ -1921,19 +1951,30 @@ int IaN(int alpha, int beta, bool EMin, bool fils, int depth)
     else
     {
         v = -2000;
-        vector<deplacement> DP = DePossible(2);
+        vector<deplacement> DP = DePossible(joueur);
         int size = DP.size();
         for (int i = 0; i < size; i++)
         {
-            /*if (!fils)
+            if (i == 0)
             {
-               // std::cout << i;
-            }*/
-            coup = DP[0];
+                coup = DP[0];
+            }
             deplacement x = changePos(DP[i].indexP, DP[i].Fin);
             int m = v;
-            v = max(v, IaN(alpha, beta, true, true, depth - 1));
-            if (v != m)
+            int t = IaN(joueur, alpha, beta, true, true, depth - 1);
+            //cout << t<<endl;
+
+            v = max(v, t);
+            /*if (!fils)
+            {
+                cout << DP[i].Fin.x << DP[i].Fin.y << endl;
+                cout << "score: " << t << endl;
+                cout << "v=: " << v << endl;
+                cout << "m=: " << m << endl;
+                cout <<"coup:" << coup.Fin.x << coup.Fin.y << endl;
+            }*/
+            if (v > m)
+
                 coup = DP[i];
             if (beta < v)
             {
@@ -2184,7 +2225,7 @@ int gestion_ecran_jeu() {
     if (G.getJoueur()==G.joueurIa)
     {
        actualisePlateau();
-       IaN(-2000, 2000, false, false, 3);
+       IaN(G.joueurIa, -2000, 2000, false, false, 2);
        G.setJoueur();
     }
     else
