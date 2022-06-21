@@ -70,6 +70,15 @@ struct _plateau {
         return valeur;
     }
     string getPlateau() { return positionPiece; }
+    void resetPlateau(){positionPiece = "22222222"
+        "22222222"
+        "00000000"
+        "00000000"
+        "00000000"
+        "00000000"
+        "11111111"
+        "11111111";
+    }
 
 };
 struct _Piece {
@@ -986,16 +995,27 @@ struct _Titre
         "[               KKK   KS8SGG4G4GKK ]"
         "[                     KKKKKKKKKKK  ]";
 
-    string Win =
+    string WinN =
 
-        "[   00000      00000   0000000   00000   00000      00000       00000       00000    00000    000000000      00000   ]"
-        "[    00000    00000   000000000  00000   00000       00000     0000000     00000     00000    0000000000     00000   ]"
-        "[      0000  00000   000    000  00000   00000        00000   000000000   00000      00000    00000 00000    00000   ]"
-        "[       00000000     000    000  00000   00000         00000 0000   0000 00000       00000    00000  00000   00000   ]"
-        "[        000000      000    000  00000   00000          00000000     00000000        00000    00000   00000  00000   ]"
-        "[        000000      000    000  00000   00000           000000       000000         00000    00000    00000 00000   ]"
-        "[        000000      0000000000  0000000000000            0000         0000          00000    00000     0000000000   ]"
-        "[        000000       0000000    0000000000000             00           00           00000    00000      000000000   ]";
+        "[   WWWWW      WWWWW   WWWWWW    WWWWW   WWWWW      WWWWW       WWWWW       WWWWW    WWWWW    WWWWWWWWW      WWWWW   ]"
+        "[    WWWWW    WWWWW  WWWWWWWWWW  WWWWW   WWWWW       WWWWW     WWWWWWW     WWWWW     WWWWW    WWWWWWWWWW     WWWWW   ]"
+        "[      WWWW  WWWWW   WWW    WWW  WWWWW   WWWWW        WWWWW   WWWWWWWWW   WWWWW      WWWWW    WWWWW WWWWW    WWWWW   ]"
+        "[       WWWWWWWW     WWW    WWW  WWWWW   WWWWW         WWWWW WWWW   WWWW WWWWW       WWWWW    WWWWW  WWWWW   WWWWW   ]"
+        "[        WWWWWW      WWW    WWW  WWWWW   WWWWW          WWWWWWWW     WWWWWWWW        WWWWW    WWWWW   WWWWW  WWWWW   ]"
+        "[        WWWWWW      WWW    WWW  WWWWW   WWWWW           WWWWWW       WWWWWW         WWWWW    WWWWW    WWWWW WWWWW   ]"
+        "[        WWWWWW      WWWWWWWWWW  WWWWWWWWWWWWW            WWWW         WWWW          WWWWW    WWWWW     WWWWWWWWWW   ]"
+        "[        WWWWWW        WWWWWW    WWWWWWWWWWWWW             WW           WW           WWWWW    WWWWW      WWWWWWWWW   ]";
+
+    string WinB =
+
+        "[   KKKKK      KKKKK   KKKKKK    KKKKK   KKKKK      KKKKK       KKKKK       KKKKK    KKKKK    KKKKKKKKK      KKKKK   ]"
+        "[    KKKKK    KKKKK  KKKKKKKKKK  KKKKK   KKKKK       KKKKK     KKKKKKK     KKKKK     KKKKK    KKKKKKKKKK     KKKKK   ]"
+        "[      KKKK  KKKKK   KKK    KKK  KKKKK   KKKKK        KKKKK   KKKKKKKKK   KKKKK      KKKKK    KKKKK KKKKK    KKKKK   ]"
+        "[       KKKKKKKK     KKK    KKK  KKKKK   KKKKK         KKKKK KKKK   KKKK KKKKK       KKKKK    KKKKK  KKKKK   KKKKK   ]"
+        "[        KKKKKK      KKK    KKK  KKKKK   KKKKK          KKKKKKKK     KKKKKKKK        KKKKK    KKKKK   KKKKK  KKKKK   ]"
+        "[        KKKKKK      KKK    KKK  KKKKK   KKKKK           KKKKKK       KKKKKK         KKKKK    KKKKK    KKKKK KKKKK   ]"
+        "[        KKKKKK      KKKKKKKKKK  KKKKKKKKKKKKK            KKKK         KKKK          KKKKK    KKKKK     KKKKKKKKKK   ]"
+        "[        KKKKKK        KKKKKK    KKKKKKKKKKKKK             KK           KK           KKKKK    KKKKK      KKKKKKKKK   ]";
 
     string Tie =
 
@@ -1073,7 +1093,7 @@ struct _Titre
         else if (numIm == 5)
         {
             Zoom = 5;
-            Texture = Win;
+            Texture = WinN;
         }
 
         else if (numIm == 6)
@@ -1092,6 +1112,12 @@ struct _Titre
         {
             Zoom = 6;
             Texture = Roi;
+        }
+
+        else if (numIm == 9)
+        {
+            Zoom = 5;
+            Texture = WinB;
         }
     }
 };
@@ -2202,12 +2228,12 @@ void affichage_ecran_jeu() {
 //end
 void affichage_ecran_victoire_blanc() 
 {
-    _Titre BG = _Titre(2);
+    _Titre BG = _Titre(6);
     BG.IdTex = G2D::InitTextureFromString(BG.Size, BG.Texture);
     BG.Size = BG.Size * BG.Zoom;
     G2D::DrawRectWithTexture(BG.IdTex, V2(-400, 0), BG.Size);
 
-    _Titre Win = _Titre(5);
+    _Titre Win = _Titre(9);
     Win.IdTex = G2D::InitTextureFromString(Win.Size, Win.Texture);
     Win.Size = Win.Size * Win.Zoom;
     G2D::DrawRectWithTexture(Win.IdTex, V2(30, 300), Win.Size);
@@ -2215,12 +2241,16 @@ void affichage_ecran_victoire_blanc()
     //G2D::DrawStringFontMono(V2(70, 500), "You WIN !!!!", 80, 10, Color::Green);
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur ENTER pour faire une autre partie.", 16,
-        3, Color::White);
+        3, Color::Black);
 }
 //end
 
 void affichage_ecran_victoire_noir() {
-    G2D::DrawStringFontMono(V2(70, 500), "Victoire Noir", 80, 10, Color::Green);
+    _Titre Win = _Titre(5);
+    Win.IdTex = G2D::InitTextureFromString(Win.Size, Win.Texture);
+    Win.Size = Win.Size * Win.Zoom;
+    G2D::DrawRectWithTexture(Win.IdTex, V2(30, 300), Win.Size);
+
     G2D::DrawStringFontMono(V2(50, 200),
         "Appuyez sur ENTER pour faire une autre partie.", 16,
         3, Color::White);
@@ -2298,6 +2328,7 @@ int gestion_ecran_options() {
 int InitPartie() {
     if (G2D::IsKeyPressed(Key::ENTER)) {
         G.setPieces();
+        G.Plateau.resetPlateau();
         G.joueur = 1;
         //réinitialise la game
         return 3;
