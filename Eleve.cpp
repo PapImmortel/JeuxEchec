@@ -1127,6 +1127,7 @@ struct deplacement {
     V2 Fin;
     int indexP;
     int couleur;
+    bool aChanger = false;
     deplacement(V2 pS, V2 pF)
     {
         start = pS;
@@ -1146,7 +1147,11 @@ struct deplacement {
 
         couleur = pcouleur;
     }
-};
+    void setChanger(bool chang)
+    {
+        aChanger = chang;
+    }
+}; 
 struct GameData {
 
     int ecran = 0;
@@ -2023,18 +2028,31 @@ int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
         {
 
             deplacement y = changePos(DP[i].indexP, DP[i].Fin);
+            if ((G.pieces[DP[i].indexP].getTypePiece() == 0 && G.pieces[DP[i].indexP].getCoord().y == 7 && G.pieces[DP[i].indexP].getCouleur() == 1) || (G.pieces[DP[i].indexP].getTypePiece() == 0 && G.pieces[DP[i].indexP].getCoord().y == 0 && G.pieces[DP[i].indexP].getCouleur() == 2))
+            {
+                DP[i].setChanger(true);
+                G.pieces[DP[i].indexP] = _Dame(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+            }
             v = min(v, IaN(joueur, alpha, beta, false, true, depth - 1));
 
             if (alpha > v)
             {
                 if (fils)
                 {
+                    if (DP[i].aChanger)
+                    {
+                        G.pieces[DP[i].indexP] = _Pion(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+                    }
                     changeBack(y);
                     actualisePlateau();
                     return v;
                 }
             }
             beta = min(beta, v);
+            if (DP[i].aChanger)
+            {
+                G.pieces[DP[i].indexP] = _Pion(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+            }
             changeBack(y);
             actualisePlateau();
         }
@@ -2050,7 +2068,13 @@ int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
             {
                 coup = DP[0];
             }
+
             deplacement x = changePos(DP[i].indexP, DP[i].Fin);
+            if ((G.pieces[DP[i].indexP].getTypePiece() == 0 && G.pieces[DP[i].indexP].getCoord().y == 7 && G.pieces[DP[i].indexP].getCouleur() == 1) || (G.pieces[DP[i].indexP].getTypePiece() == 0 && G.pieces[DP[i].indexP].getCoord().y == 0 && G.pieces[DP[i].indexP].getCouleur() == 2))
+            {
+                DP[i].setChanger(true);
+                G.pieces[DP[i].indexP] = _Dame(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+            }
             int m = v;
             int t = IaN(joueur, alpha, beta, true, true, depth - 1);
             //cout << t<<endl;
@@ -2078,6 +2102,10 @@ int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
                 }
             }
             alpha = max(alpha, v);
+            if (DP[i].aChanger)
+            {
+                G.pieces[DP[i].indexP] = _Pion(G.pieces[DP[i].indexP].getCoord(), G.pieces[DP[i].indexP].getCouleur());
+            }
             changeBack(x);
             actualisePlateau();
         }
@@ -2089,6 +2117,11 @@ int IaN(int joueur, int alpha, int beta, bool EMin, bool fils, int depth)
     else
     {
         changePos(coup.indexP, coup.Fin);
+        if ((G.pieces[coup.indexP].getTypePiece() == 0 && G.pieces[coup.indexP].getCoord().y == 7 && G.pieces[coup.indexP].getCouleur() == 1) || (G.pieces[coup.indexP].getTypePiece() == 0 && G.pieces[coup.indexP].getCoord().y == 0 && G.pieces[coup.indexP].getCouleur() == 2))
+        {
+
+            G.pieces[coup.indexP] = _Dame(G.pieces[coup.indexP].getCoord(), G.pieces[coup.indexP].getCouleur());
+        }
         actualisePlateau();
         fin();
         return v;
