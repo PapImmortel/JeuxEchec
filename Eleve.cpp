@@ -46,7 +46,15 @@ struct _plateau {
         "[66666666]"
         "[66666666]"
         "[66666666]";
-    string texturePossible = "[        ]"
+    string texturePiece = "[        ]"
+        "[   GG   ]"
+        "[  G  G  ]"
+        "[ G GG G ]"
+        "[ G GG G ]"
+        "[  G  G  ]"
+        "[   GG   ]"
+        "[        ]";
+    string texturePasPiece = "[        ]"
         "[   GG   ]"
         "[  G  G  ]"
         "[ G GG G ]"
@@ -1167,7 +1175,8 @@ struct GameData {
     void setTimerEnd(int _TimerEnd) { TimerEnd = _TimerEnd; }
     int IdTexMur;
     int IdTexSol;
-    int IdTexPossible;
+    int IdTexPiece;
+    int IdTexPasPiece;
     deplacement test = deplacement(V2(), V2());
     vector<V2> zonesJouables = {};
     
@@ -1828,7 +1837,7 @@ vector<deplacement> DePossible(int joueur)
 int point(int joueur)
 {
     int point = 0;
-
+    int nbPiece = 0;
     for (int i = 0; i < 32; i++)
     {
 
@@ -1851,7 +1860,10 @@ int point(int joueur)
                 {
                     point += 2;
                 }
-
+                if (P.couleur != joueur)
+                {
+                    nbPiece += 1;
+                }
             }
 
         }
@@ -1873,7 +1885,10 @@ int point(int joueur)
                 {
                     point -= 2;
                 }
-
+                if (P.couleur != joueur)
+                {
+                    nbPiece += 1;
+                }
             }
         }
     }
@@ -1882,17 +1897,26 @@ int point(int joueur)
         point = -point;
         vector<deplacement> M = DePossible(1);
         point += M.size() * (1 / 3);
+
+        if (nbPiece > 12)
+        {
+            vector<deplacement> e = DePossible(2);
+            point += 10 / (1 + e.size());
+        }
     }
     else
     {
         vector<deplacement> M = DePossible(2);
         point += M.size() * (1 / 3);
-
+        if (nbPiece > 12)
+        {
+            vector<deplacement> e = DePossible(1);
+            point += 10 / (1 + e.size());
+        }
     }
     int score = point;
     return score;
-}
-//IA
+}//IA
 void Timer(_Piece* piece, int multiplier)
 {
     
@@ -2247,10 +2271,17 @@ void affichage_ecran_jeu() {
     }
     if (G.pieceEncours != -1) {
         for (V2 position : G.zonesJouables) {
-            int xx = position.x * G.Lpix - 12;
+            int xx = position.x * G.Lpix ;
             int yy = position.y * G.Lpix;
-            G2D::DrawRectWithTexture(G.IdTexPossible, V2(xx, yy),
-                G.Size);
+            if (G.Plateau.getPositionPiece(position) != 0)
+            {
+                G2D::DrawCircle(V2(xx + G.Lpix/2,yy + G.Lpix / 2), G.Lpix/2,Color::Black, false);
+            }
+            else
+            {
+                G2D::DrawRectangle(V2(xx + G.Lpix / 3, yy + G.Lpix / 3), V2(G.Lpix/4,G.Lpix/4), Color::Black, true);
+            }
+            
         }
     }
     if (G2D::IsMouseLeftButtonPressed())
@@ -2572,8 +2603,10 @@ void AssetsInit() {
         G2D::InitTextureFromString(G.Size, G.Plateau.textureMur);
     G.IdTexSol =
         G2D::InitTextureFromString(G.Size, G.Plateau.textureSol);
-    G.IdTexPossible =
-        G2D::InitTextureFromString(G.Size, G.Plateau.texturePossible);
+    G.IdTexPiece =
+        G2D::InitTextureFromString(G.Size, G.Plateau.texturePiece);
+    G.IdTexPasPiece =
+        G2D::InitTextureFromString(G.Size, G.Plateau.texturePasPiece);
     G.Size =
         G.Size * 10; // on peut zoomer la taille du sprite
 }

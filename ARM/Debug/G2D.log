@@ -1,0 +1,1 @@
+﻿ARM\Debug\G2DColor.obj : fatal error LNK1112: type d'ordinateur module 'x86' en conflit avec le type d'ordinateur cible 'ARM'
